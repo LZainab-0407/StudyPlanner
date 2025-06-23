@@ -1,10 +1,29 @@
 package views;
 
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
-public class TaskManagerPanel extends JPanel {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import controllers.TaskController;
+
+public class TaskManagerPanel extends JPanel{
+	JButton addNewTaskButton;
+	JFrame parentFrame;
 	
-	public TaskManagerPanel() {
+	public TaskManagerPanel(JFrame parentFrame){
+		this.parentFrame = parentFrame;
+		this.setPreferredSize(new Dimension(150, 500));
 		
+		this.setLayout(new GridLayout(10, 1));
+		
+		addNewTaskButton = new JButton("Add New Task");
+		addNewTaskButton.setFocusable(false);
+		
+		addNewTaskButton.addActionListener(e -> TaskController.openAddNewTaskWindow(parentFrame));
+		
+		this.add(addNewTaskButton);
 	}
 }
