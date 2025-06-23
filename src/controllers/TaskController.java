@@ -24,6 +24,7 @@ import com.toedter.calendar.JDateChooser;
 import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
+import views.TaskListPanel;
 
 public class TaskController{
 
@@ -101,7 +102,15 @@ public class TaskController{
 		});
 		
 		// cancel button logic: close window
-		cancelButton.addActionListener(e -> {inputFrame.dispose();});
+		cancelButton.addActionListener(e -> {inputFrame.dispose();});	
+	}
+	
+	public static void displayTaskList(JPanel mainContent) {
+		mainContent.removeAll();
+		TaskListPanel taskListPanel = new TaskListPanel();
+		mainContent.add(taskListPanel, BorderLayout.CENTER);
 		
+		mainContent.revalidate();
+	    mainContent.repaint();
 	}
 }

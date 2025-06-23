@@ -1,6 +1,7 @@
 package models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Task {
 	private String title;
@@ -31,7 +32,8 @@ public class Task {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	
+	
 	public LocalDateTime getDeadline() {
 		return deadline;
 	}
@@ -50,7 +52,11 @@ public class Task {
 	
 	@Override
 	public String toString() {
-		return title + ": " + description + "\n" + priorityLevel + "\nDeadline: " + deadline;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM hh:mm a");
+		return "Title: "+title + "\n " + 
+				"Description: "+ description + "\n " + 
+				"Priority Level: " + priorityLevel + 
+				"\n Due on: " + deadline.format(formatter) + "\n";
 		
 	}
 }
