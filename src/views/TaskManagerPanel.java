@@ -25,6 +25,5 @@ public class TaskManagerPanel extends JPanel{
 		addNewTaskButton.addActionListener(e -> TaskController.openAddNewTaskWindow(parentFrame));
 		
 		this.add(addNewTaskButton);
-		
 	}
 }
