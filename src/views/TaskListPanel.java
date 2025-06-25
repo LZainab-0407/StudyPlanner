@@ -9,6 +9,7 @@ import javax.swing.JTextArea;
 
 import data.TaskManager;
 import models.Task;
+import models.UserSession;
 
 public class TaskListPanel extends JPanel{
 	JFrame parentFrame;
@@ -19,6 +20,7 @@ public class TaskListPanel extends JPanel{
 		int i = 1;
 		JTextArea listArea = new JTextArea();
 		listArea.append("Pending Tasks: \n\n");
+		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
 		for(Task task : TaskManager.getTasks()) {
 			listArea.append(Integer.toString(i++) + "." + task.toString() + "\n");
 		}

@@ -3,10 +3,15 @@ package controllers;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -24,6 +29,7 @@ import com.toedter.calendar.JDateChooser;
 import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
+import models.UserSession;
 import views.TaskListPanel;
 
 public class TaskController{
@@ -95,7 +101,10 @@ public class TaskController{
 			LocalDateTime taskDeadline = LocalDateTime.of(deadlineDate, LocalTime.of(23, 59));
 			
 			Task newTask = new Task(taskTitle, taskDescription, taskDeadline, taskPriorityLevel);
+			// update task list
 			TaskManager.addTask(newTask);
+			// save updated task list to file
+			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			
 			JOptionPane.showMessageDialog(inputFrame, "New task added!");
 			inputFrame.dispose();
@@ -109,7 +118,6 @@ public class TaskController{
 		mainContent.removeAll();
 		TaskListPanel taskListPanel = new TaskListPanel();
 		mainContent.add(taskListPanel, BorderLayout.CENTER);
-		
 		mainContent.revalidate();
 	    mainContent.repaint();
 	}

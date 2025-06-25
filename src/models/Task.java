@@ -1,9 +1,12 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Task {
+public class Task implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	private String title;
 	private String description;
 	private LocalDateTime deadline;
