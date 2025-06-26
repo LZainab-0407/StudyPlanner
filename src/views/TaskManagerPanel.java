@@ -22,7 +22,7 @@ public class TaskManagerPanel extends JPanel{
 		addNewTaskButton = new JButton("Add New Task");
 		addNewTaskButton.setFocusable(false);
 		
-		addNewTaskButton.addActionListener(e -> TaskController.openAddNewTaskWindow(parentFrame, mainContent));
+		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parentFrame, mainContent));
 		
 		this.add(addNewTaskButton);
 	}
