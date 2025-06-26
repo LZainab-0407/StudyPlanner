@@ -2,6 +2,7 @@ package views;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -27,10 +28,7 @@ public class TaskListPanel extends JPanel{
 	public TaskListPanel(JPanel mainContentPanel) {
 		this.setLayout(new GridLayout(TaskManager.getTasks().size() + 2, 1, 5, 5));
 		this.mainContentPanel = mainContentPanel;
-//		int i = 1;
-//		JTextArea listArea = new JTextArea();
-//		listArea.append("Pending Tasks: \n\n");
-		
+
 		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
 		for(Task task : TaskManager.getTasks()) {
 			
@@ -39,10 +37,9 @@ public class TaskListPanel extends JPanel{
 			
 			JPanel taskInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JTextArea taskArea = new JTextArea(task.toString());
+			taskArea.setFont(new Font("Arial", Font.PLAIN, 10));
 			taskArea.setEditable(false);
 			taskArea.setOpaque(true);
-//			taskArea.setLineWrap(true);
-//			taskArea.setWrapStyleWord(true);
 			
 			JScrollPane taskInfoPane = new JScrollPane(taskArea);
 			taskInfoPane.setFocusable(false);
@@ -97,10 +94,16 @@ public class TaskListPanel extends JPanel{
 			// first row, first column
 			gbc.gridx = 0;
 			gbc.gridy = 0;
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.weightx = 1.0;
+			gbc.weighty = 1.0;
 			taskPanel.add(taskInfoPanel, gbc);
 			
 			// first row, second column
 			gbc.gridx = 1;
+			gbc.fill = GridBagConstraints.NONE;
+			gbc.weightx = 0;
+			gbc.weighty = 0;
 			taskPanel.add(completedBox, gbc);
 			
 			// first row, third column
