@@ -17,7 +17,7 @@ public class MyMenuBar extends JMenuBar{
 		this.mainContent = mainContent;
 		
 		JMenuItem addTaskItem = new JMenuItem("Add New Task");
-		addTaskItem.addActionListener(e -> TaskController.openAddNewTaskWindow(parent));
+		addTaskItem.addActionListener(e -> TaskController.openAddNewTaskWindow(parent, mainContent));
 		
 		JMenuItem viewTaskListItem = new JMenuItem("View Task List");
 		viewTaskListItem.addActionListener(e -> {
