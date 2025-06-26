@@ -7,10 +7,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import models.PriorityLevel;
 import models.Task;
 
 public class TaskManager {
 	private static ArrayList<Task> taskList = new ArrayList<Task>();
+	private static ArrayList<Task> completedTaskList = new ArrayList<Task>();
 	
 	/**
      * Adds a new task to the current task list in memory.
@@ -24,6 +26,21 @@ public class TaskManager {
      */
 	public static ArrayList<Task> getTasks(){
 		return taskList;
+	}
+	
+	 /**
+     * Returns the list of tasks currently in memory.
+     */
+	public static ArrayList<Task> getCompletedTasks(){
+		return completedTaskList;
+	}
+	
+	/*
+	 * Rearranges task list according to priority level.
+	 * high priority tasks are at the top'
+	 */
+	public static void prioritizeTaskList() {
+		taskList.sort((t1, t2) -> t1.getPriorityLevel().compareTo(t2.getPriorityLevel()));
 	}
 	
 	/**
@@ -68,6 +85,13 @@ public class TaskManager {
      */
     public static void clearTasks() {
         taskList.clear();
+    }
+    
+    /*
+     * removes current task from task list
+     */
+    public static void deleteTask(Task task) {
+    	taskList.remove(task);
     }
 	
 }

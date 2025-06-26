@@ -13,7 +13,7 @@ public class TaskManagerPanel extends JPanel{
 	JButton addNewTaskButton;
 	JFrame parentFrame;
 	
-	public TaskManagerPanel(JFrame parentFrame){
+	public TaskManagerPanel(JFrame parentFrame, JPanel mainContent){
 		this.parentFrame = parentFrame;
 		this.setPreferredSize(new Dimension(150, 500));
 		
@@ -22,7 +22,7 @@ public class TaskManagerPanel extends JPanel{
 		addNewTaskButton = new JButton("Add New Task");
 		addNewTaskButton.setFocusable(false);
 		
-		addNewTaskButton.addActionListener(e -> TaskController.openAddNewTaskWindow(parentFrame));
+		addNewTaskButton.addActionListener(e -> TaskController.openAddNewTaskWindow(parentFrame, mainContent));
 		
 		this.add(addNewTaskButton);
 	}

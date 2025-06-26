@@ -90,7 +90,6 @@ public class LogInFrame extends JFrame{
 			if (UserController.login(username, password)) {
 				this.dispose();
 				AppController.onLogInSuccess(UserSession.getCurrentUser());
-				JOptionPane.showMessageDialog(this, "Welcome " + username);
 			}
 			else {
 				JOptionPane.showMessageDialog(this, "Log in failed. Please recheck username and/or password.");
