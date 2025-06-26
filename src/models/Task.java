@@ -1,16 +1,20 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Task {
+public class Task implements Serializable{
+	private static final long serialVersionUID = 1L;
+
 	private String title;
 	private String description;
 	private LocalDateTime deadline;
 	private PriorityLevel priorityLevel;
+	private boolean isCompleted;
 	
 	public Task(String title, String description, LocalDateTime deadline, PriorityLevel level) {
-		
+		this.setCompleted(false);
 		this.setTitle(title);
 		this.setDescription(description);
 		this.setDeadline(deadline);
@@ -56,7 +60,15 @@ public class Task {
 		return "Title: "+title + "\n " + 
 				"Description: "+ description + "\n " + 
 				"Priority Level: " + priorityLevel + 
-				"\n Due on: " + deadline.format(formatter) + "\n";
+				"\n Due on: " + deadline.format(formatter);
 		
+	}
+
+	public boolean isCompleted() {
+		return isCompleted;
+	}
+
+	public void setCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
 	}
 }
