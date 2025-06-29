@@ -76,7 +76,7 @@ public class TaskController{
 				JOptionPane.showMessageDialog(inputPanel, "Please select a deadline");
 				return; // return from action performed method
 			}
-			LocalDateTime taskDeadline = inputPanel.getDeadlineFromPicker();
+			LocalDate taskDeadline = inputPanel.getDeadlineFromPicker();
 			
 			Task newTask = new Task(taskTitle, taskDescription, taskDeadline, taskPriorityLevel);
 			
