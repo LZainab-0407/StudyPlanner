@@ -73,7 +73,7 @@ Labibah Zainab
 
  ---
 
-📜 License
+## 📜 License
 This project is open-source for educational and portfolio use.
 Feel free to contribute or suggest features by opening issues or pull requests! 🎉
 
