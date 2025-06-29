@@ -35,12 +35,19 @@ public class TaskManager {
 		return completedTaskList;
 	}
 	
-	/*
+	/**
 	 * Rearranges task list according to priority level.
 	 * high priority tasks are at the top'
 	 */
 	public static void prioritizeTaskList() {
 		taskList.sort((t1, t2) -> t1.getPriorityLevel().compareTo(t2.getPriorityLevel()));
+	}
+	
+	/**
+	 * Sorts the tasklist according to deadline
+	 */
+	public static void sortTasksByDeadline() {
+		taskList.sort((t1, t2) -> t1.getDeadline().compareTo(t2.getDeadline()));
 	}
 	
 	/**
