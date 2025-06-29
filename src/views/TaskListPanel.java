@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -8,9 +9,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -48,8 +51,15 @@ public class TaskListPanel extends JPanel{
 			
 			setPriorityColor(task, taskArea);
 			
+			JPanel statusPanel = new JPanel();
+			JLabel statusLabel = new JLabel(task.getStatus());
+			statusPanel.add(statusLabel);
+			
 			JPanel boxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			JCheckBox completedBox = new JCheckBox();
+			completedBox.setToolTipText("Complete task");
+			completedBox.setIcon(new ImageIcon("Resources/icons/unchecked.png"));
+			completedBox.setSelectedIcon(new ImageIcon("Resources/icons/check.png"));
 			completedBox.setOpaque(false);
 			boxPanel.add(completedBox);
 			
@@ -67,12 +77,12 @@ public class TaskListPanel extends JPanel{
 					setPriorityColor(task, taskArea);
 				}
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				TaskController.refresh(mainContentPanel);
 			});
 			
 			
 			JPanel deleteButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			JButton deleteButton = new JButton("Delete");
-			deleteButton.setFocusable(false);
+			JButton deleteButton = generateIconOnlyButton("Delete task", new ImageIcon("Resources/icons/delete.png"));
 			deleteButtonPanel.add(deleteButton);
 			deleteButton.addActionListener(e -> {
 				TaskManager.deleteTask(task);
@@ -81,8 +91,7 @@ public class TaskListPanel extends JPanel{
 			});
 			
 			JPanel editButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			JButton editButton = new JButton("Edit");
-			editButton.setFocusable(false);
+			JButton editButton = generateIconOnlyButton("Edit task", new ImageIcon("Resources/icons/edit.png"));
 			editButtonPanel.add(editButton);
 			editButton.addActionListener(e -> {
 				TaskController.editTask(task, taskInfoPanel, mainContentPanel);
@@ -104,18 +113,21 @@ public class TaskListPanel extends JPanel{
 			gbc.fill = GridBagConstraints.NONE;
 			gbc.weightx = 0;
 			gbc.weighty = 0;
-			taskPanel.add(completedBox, gbc);
+			taskPanel.add(statusPanel, gbc);
 			
 			// first row, third column
 			gbc.gridx = 2;
-			taskPanel.add(deleteButtonPanel, gbc);
+			taskPanel.add(completedBox, gbc);
 			
 			// first row, fourth column
 			gbc.gridx = 3;
+			taskPanel.add(deleteButtonPanel, gbc);
+			
+			// first row, fifth column
+			gbc.gridx = 4;
 			taskPanel.add(editButtonPanel, gbc);
 			
 			this.add(taskPanel);
-			//listArea.append(Integer.toString(i++) + "." + task.toString() + "\n");
 		}
 		
 	}
@@ -137,6 +149,30 @@ public class TaskListPanel extends JPanel{
 			taskArea.setBackground(Color.yellow);
 			break;
 		}
+	}
+	
+	/**
+	 * Creates a small, transparent icon-only JButton with a tooltip.
+	 * <p>
+	 * This button has no border, background, or focus highlight, making it ideal
+	 * for minimalist UI designs with image-based actions (e.g. delete, edit).
+	 * The button is sized to 20x20 pixels and includes a tooltip for accessibility.
+	 *
+	 * @param toolTipText the tooltip text displayed on hover (e.g. "Delete Task")
+	 * @param icon the ImageIcon to be used for the button
+	 * @return a configured JButton with only the given icon
+	 */
+	public static JButton generateIconOnlyButton(String toolTipText, ImageIcon icon) {
+		JButton iconOnlyButton = new JButton(icon);
+		iconOnlyButton.setFocusable(false);
+		iconOnlyButton.setContentAreaFilled(false);
+		iconOnlyButton.setBorderPainted(false);
+		iconOnlyButton.setFocusPainted(false);
+		iconOnlyButton.setOpaque(false);
+		iconOnlyButton.setToolTipText(toolTipText);
+		iconOnlyButton.setPreferredSize(new Dimension(20, 20));
+		iconOnlyButton.setFocusable(false);
+		return iconOnlyButton;
 	}
 	
 }
