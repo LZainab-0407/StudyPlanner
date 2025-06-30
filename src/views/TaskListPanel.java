@@ -25,7 +25,6 @@ import models.Task;
 import models.UserSession;
 
 public class TaskListPanel extends JPanel{
-	JFrame parentFrame;
 	JPanel mainContentPanel;
 	
 	public TaskListPanel(JPanel mainContentPanel) {
@@ -35,7 +34,6 @@ public class TaskListPanel extends JPanel{
 		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
 		for(Task task : TaskManager.getTasks()) {
 			
-			//JPanel taskPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel taskPanel = new JPanel(new GridBagLayout());
 			
 			JPanel taskInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -77,7 +75,7 @@ public class TaskListPanel extends JPanel{
 					setPriorityColor(task, taskArea);
 				}
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-				TaskController.refresh(mainContentPanel);
+				TaskController.refreshTaskList(mainContentPanel);
 			});
 			
 			
@@ -87,7 +85,7 @@ public class TaskListPanel extends JPanel{
 			deleteButton.addActionListener(e -> {
 				TaskManager.deleteTask(task);
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-				TaskController.refresh(mainContentPanel); //***************************************
+				TaskController.refreshTaskList(mainContentPanel); //***************************************
 			});
 			
 			JPanel editButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
