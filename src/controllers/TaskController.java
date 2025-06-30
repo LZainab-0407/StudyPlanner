@@ -88,13 +88,21 @@ public class TaskController{
 			JOptionPane.showMessageDialog(inputFrame, "New task added!");
 			inputFrame.dispose();
 			
-			refresh(mainContent);
+			refreshTaskList(mainContent);
 		});
 		
 		// cancel button logic: close window
 		cancelButton.addActionListener(e -> {inputFrame.dispose();});	
 	}
 	
+	/**
+	 * Displays the task list panel in the main content area.
+	 * <p>
+	 * This method clears the mainContent panel and replaces it with a
+	 * scrollable list of tasks, along with a header label at the top.
+	 *
+	 * @param mainContent the panel where the task list should be displayed
+	 */
 	public static void displayTaskList(JPanel mainContent) {
 		mainContent.removeAll();
 		JLabel pendingTasksLabel = new JLabel("Pending Tasks", SwingConstants.CENTER);
@@ -110,9 +118,10 @@ public class TaskController{
 	/**
 	 * Refreshes the task list panel after clicking any of the button/checkboxes
 	 */
-	public static void refresh(JPanel mainContent) {
+	public static void refreshTaskList(JPanel mainContent) {
 		displayTaskList(mainContent);
 	}
+	
 	
 	/**
 	 * Edits a task after it has been created.
@@ -149,7 +158,7 @@ public class TaskController{
 			
 			changeFrame.dispose();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent);
+			TaskController.refreshTaskList(mainContent);
 		});
 		
 		JButton cancelButton = new JButton("Cancel");

@@ -10,6 +10,13 @@ import javax.swing.JPanel;
 import data.TaskManager;
 import models.UserSession;
 
+/**
+ * MainFrame represents the primary application window that is launched after
+ * a successful login. It contains the main content area (center), a left panel,
+ * a right-side control panel with buttons, and a top menu bar.
+ *
+ * The default center view is the calendar dashboard.
+ */
 public class MainFrame extends JFrame {
 	
 	public MainFrame() {
@@ -24,13 +31,13 @@ public class MainFrame extends JFrame {
 		
 		JPanel mainContent = new JPanel();
 		mainContent.setLayout(new BorderLayout());
+		CalendarView calendarView = new CalendarView();
+		mainContent.add(calendarView, BorderLayout.CENTER);
+		
 		this.add(mainContent, BorderLayout.CENTER);
 		
 		MyMenuBar myMenuBar = new MyMenuBar(this, mainContent);
 		this.setJMenuBar(myMenuBar);
-		
-//		TaskManagerPanel taskManagerPanel = new TaskManagerPanel(this, mainContent);
-//		this.add(taskManagerPanel, BorderLayout.EAST);
 		
 		JPanel rightPanel = generateRightPanel(this, mainContent);
 		this.add(rightPanel, BorderLayout.EAST);
@@ -39,20 +46,24 @@ public class MainFrame extends JFrame {
 	}
 	
 	/**
-	 * generates a panel that sits on the right side of the main app.
-	 * this is like a right hand menu list
-	 * @param mainFrame
-	 * @param mainContent
-	 * @return rightPanel
-	 */
+    * Generates the right-side control panel which contains:
+    * - Task management buttons (add, sort, etc.)
+    * - A logout button that saves data and returns to login screen
+    *
+    * @param mainFrame the parent application frame
+    * @param mainContent the central panel to refresh as needed
+    * @return a configured JPanel for the right side of the layout
+    */
 	public static JPanel generateRightPanel(JFrame mainFrame, JPanel mainContent) {
 		JPanel rightPanel = new JPanel();
 		rightPanel.setPreferredSize(new Dimension(150, 500));
 		rightPanel.setLayout(new BorderLayout());
 		
+		// Task manager controls (add task, sort task)
 		TaskManagerPanel taskManagerPanel = new TaskManagerPanel(mainContent);
 		rightPanel.add(taskManagerPanel, BorderLayout.NORTH);
 		
+		// Logout button
 		JButton logOutButton = new JButton("Log Out");
 		logOutButton.setFocusable(false);
 		
