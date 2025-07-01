@@ -21,6 +21,7 @@ import models.Task;
 import models.UserSession;
 import views.TaskFormPanel;
 import views.TaskListPanel;
+import views.ViewContext;
 
 public class TaskController{
 	
@@ -115,13 +116,20 @@ public class TaskController{
 		displayTaskList(mainContent);
 	}
 	
-	
+	public static void refresh(JPanel mainContent, ViewContext view) {
+		switch (view) {
+		case ViewContext.TASK_LIST: refreshTaskList(mainContent); break;
+		case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
+		}
+	}
 	/**
 	 * Edits a task after it has been created.
 	 * Called when the edit button is pressed.
+	 * if view is task list, then the task list UI is refreshed,
+	 * if view is "calendar view", then calendar UI is refreshed
 	 * @param task
 	 */
-	public static void editTask(Task task, JPanel infoPanel, JPanel mainContent) {
+	public static void editTask(Task task, JPanel infoPanel, JPanel mainContent, ViewContext view) {
 		JFrame changeFrame = new JFrame("Edit Task");
 		changeFrame.setLocationRelativeTo(null);
 		changeFrame.setLayout(new BorderLayout());
@@ -151,7 +159,7 @@ public class TaskController{
 			
 			changeFrame.dispose();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refreshTaskList(mainContent);
+			refresh(mainContent, view);
 		});
 		
 		JButton cancelButton = new JButton("Cancel");
