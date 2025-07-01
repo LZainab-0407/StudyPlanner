@@ -16,12 +16,12 @@ import models.Task;
 public class TaskListPanel extends JPanel{
 	JPanel mainContentPanel;
 	
-	public TaskListPanel(JPanel mainContent, ArrayList<Task> tasks) {
+	public TaskListPanel(JPanel mainContent, ArrayList<Task> tasks, ViewContext view) {
 		this.setLayout(new GridLayout(TaskManager.getTasks().size() + 2, 1, 5, 5));
 		this.mainContentPanel = mainContent;
 
 		for(Task task : tasks) {
-			JPanel taskPanel = new TaskPanel(task, mainContentPanel, ViewContext.TASK_LIST);
+			JPanel taskPanel = new TaskPanel(task, mainContentPanel, view);
 			this.add(taskPanel);
 		}
 		

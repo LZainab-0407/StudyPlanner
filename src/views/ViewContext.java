@@ -11,6 +11,9 @@ public enum ViewContext {
 	/** The task is being displayed in the main task list view. */
 	TASK_LIST,
 	
+	
+	TASK_LIST_ON_DATE,
+	
 	/** The task is being displayed from the calendar view (e.g. as a popup). */
 	CALENDAR
 }
