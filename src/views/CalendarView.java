@@ -25,12 +25,13 @@ public class CalendarView extends JPanel{
 	private YearMonth currentMonth;
 	private JPanel calendarGrid;
 	//private JFrame parentFrame;
-	//private JPanel mainContent;
+	private JPanel mainContent;
 	
-	public CalendarView(){
+	public CalendarView(JPanel mainContent){
 		// this.parentFrame = parentFrame;
 		this.setLayout(new BorderLayout());
 		this.currentMonth = YearMonth.now();
+		this.mainContent = mainContent;
 		
 		addHeader();
 		drawCalendar();
@@ -120,7 +121,7 @@ public class CalendarView extends JPanel{
 //				// display tasks due on this day
 //				
 //			});
-			CalendarDayPanel dayPanel = new CalendarDayPanel(day);
+			CalendarDayPanel dayPanel = new CalendarDayPanel(day, currentMonth, mainContent);
 			calendarGrid.add(dayPanel);
 		}
 		
