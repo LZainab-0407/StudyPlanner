@@ -59,14 +59,14 @@ public class TaskManagerPanel extends JPanel{
 		byPriorityItem.addActionListener(e -> {
 			TaskManager.prioritizeTaskList();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent);
+			TaskController.refreshTaskList(mainContent);
 		});
 		
 		JMenuItem byDeadlineItem = new JMenuItem("By Deadline");
 		byDeadlineItem.addActionListener(e -> {
 			TaskManager.sortTasksByDeadline();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent);
+			TaskController.refreshTaskList(mainContent);
 		});
 		
 		sortOptions.add(byPriorityItem);

@@ -11,6 +11,7 @@ import java.util.Date;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -83,6 +84,7 @@ public class TaskFormPanel extends JPanel {
 		// fourth row, second column
 		deadlinePicker = new JDateChooser();
 		deadlinePicker.setDateFormatString("dd MMMMM yyyy");
+		deadlinePicker.setMinSelectableDate(new Date()); // can't pick dates that have already passed
 		gbc.gridx = 1;
 		this.add(deadlinePicker, gbc);
 	}
@@ -103,7 +105,7 @@ public class TaskFormPanel extends JPanel {
 	}
 	
 	/**
-	 * gets texyt from description area
+	 * gets text from description area
 	 * @return
 	 */
 	public String getDescriptionText() {
@@ -138,23 +140,23 @@ public class TaskFormPanel extends JPanel {
 	 * returns deadline selected from deadline picker
 	 * @return
 	 */
-	public LocalDateTime getDeadlineFromPicker() {
+	public LocalDate getDeadlineFromPicker() {
 		Date selectedDate = deadlinePicker.getDate();
 		if (selectedDate == null) {
 			return null;
 		}
 		LocalDate date = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return LocalDateTime.of(date, LocalTime.of(23, 59));
+		return date;
 	}
 	
 	/**
 	 * Sets initial date on deadline picker 
-	 * @param deadline  (LocalDateTime) taskDeadline
+	 * @param deadline  (LocalDate) taskDeadline
 	 */
-	public void setDeadlinePickerdate(LocalDateTime deadline) {
+	public void setDeadlinePickerdate(LocalDate deadline) {
 		if(deadline != null) {
-			 Date date = Date.from(deadline.atZone(ZoneId.systemDefault()).toInstant());
-	         deadlinePicker.setDate(date);
+			Date date = Date.from(deadline.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	        deadlinePicker.setDate(date);
 		}
 	}
 	

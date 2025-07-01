@@ -20,7 +20,7 @@ public class AppController {
     
     /**
      * Called after a successful login.
-     * Opens the main dashboard, after which the logInFrame should be disposed
+     * Opens the main dash board, after which the logInFrame should be disposed
      *
      * @param user The successfully authenticated user
      */

@@ -2,27 +2,18 @@ package controllers;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Font;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import com.toedter.calendar.JDateChooser;
 
 import data.TaskManager;
 import models.PriorityLevel;
@@ -30,6 +21,7 @@ import models.Task;
 import models.UserSession;
 import views.TaskFormPanel;
 import views.TaskListPanel;
+import views.ViewContext;
 
 public class TaskController{
 	
@@ -76,7 +68,7 @@ public class TaskController{
 				JOptionPane.showMessageDialog(inputPanel, "Please select a deadline");
 				return; // return from action performed method
 			}
-			LocalDateTime taskDeadline = inputPanel.getDeadlineFromPicker();
+			LocalDate taskDeadline = inputPanel.getDeadlineFromPicker();
 			
 			Task newTask = new Task(taskTitle, taskDescription, taskDeadline, taskPriorityLevel);
 			
@@ -88,19 +80,29 @@ public class TaskController{
 			JOptionPane.showMessageDialog(inputFrame, "New task added!");
 			inputFrame.dispose();
 			
-			refresh(mainContent);
+			refreshTaskList(mainContent);
 		});
 		
 		// cancel button logic: close window
 		cancelButton.addActionListener(e -> {inputFrame.dispose();});	
 	}
 	
+	/**
+	 * Displays the task list panel in the main content area.
+	 * <p>
+	 * This method clears the mainContent panel and replaces it with a
+	 * scrollable list of tasks, along with a header label at the top.
+	 *
+	 * @param mainContent the panel where the task list should be displayed
+	 */
 	public static void displayTaskList(JPanel mainContent) {
 		mainContent.removeAll();
 		JLabel pendingTasksLabel = new JLabel("Pending Tasks", SwingConstants.CENTER);
+		pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 		mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
 		
-		TaskListPanel taskListPanel = new TaskListPanel(mainContent);
+		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
+		TaskListPanel taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasks());
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);
 		mainContent.add(taskListPane, BorderLayout.CENTER);
 		mainContent.revalidate();
@@ -110,16 +112,24 @@ public class TaskController{
 	/**
 	 * Refreshes the task list panel after clicking any of the button/checkboxes
 	 */
-	public static void refresh(JPanel mainContent) {
+	public static void refreshTaskList(JPanel mainContent) {
 		displayTaskList(mainContent);
 	}
 	
+	public static void refresh(JPanel mainContent, ViewContext view) {
+		switch (view) {
+		case ViewContext.TASK_LIST: refreshTaskList(mainContent); break;
+		case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
+		}
+	}
 	/**
 	 * Edits a task after it has been created.
 	 * Called when the edit button is pressed.
+	 * if view is task list, then the task list UI is refreshed,
+	 * if view is "calendar view", then calendar UI is refreshed
 	 * @param task
 	 */
-	public static void editTask(Task task, JPanel infoPanel, JPanel mainContent) {
+	public static void editTask(Task task, JPanel infoPanel, JPanel mainContent, ViewContext view) {
 		JFrame changeFrame = new JFrame("Edit Task");
 		changeFrame.setLocationRelativeTo(null);
 		changeFrame.setLayout(new BorderLayout());
@@ -149,7 +159,7 @@ public class TaskController{
 			
 			changeFrame.dispose();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent);
+			refresh(mainContent, view);
 		});
 		
 		JButton cancelButton = new JButton("Cancel");

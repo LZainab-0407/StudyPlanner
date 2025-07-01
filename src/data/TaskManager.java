@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import models.PriorityLevel;
@@ -33,6 +34,27 @@ public class TaskManager {
      */
 	public static ArrayList<Task> getCompletedTasks(){
 		return completedTaskList;
+	}
+	
+	/**
+	 * Returns a list of all tasks that are due on the specified date.
+	 * <p>
+	 * This method filters the task list and returns only those tasks
+	 * whose deadlines match the given {@code LocalDate}.
+	 *
+	 * @param date the date to check for task deadlines
+	 * @return a list of tasks due on the specified date
+	 */
+	public static ArrayList<Task> getTasksOnDate(LocalDate date){
+		ArrayList<Task> tasks = new ArrayList<>();
+		
+		for(Task t: taskList) {
+			if (t.getDeadline().equals(date)){
+				tasks.add(t);
+			}
+		}
+		
+		return tasks;
 	}
 	
 	/**
