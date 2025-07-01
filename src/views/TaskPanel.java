@@ -86,7 +86,7 @@ public class TaskPanel extends JPanel{
 				setPriorityColor();
 			}
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent, view);
+			TaskController.refresh(mainContent, view, task.getDeadline());
 		});
 		
 		JPanel deleteButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -95,7 +95,7 @@ public class TaskPanel extends JPanel{
 		deleteButton.addActionListener(e -> {
 			TaskManager.deleteTask(task);
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent, view);
+			TaskController.refresh(mainContent, view, task.getDeadline());
 		});
 		
 		JPanel editButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));

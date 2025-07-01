@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
+import controllers.TaskController;
 import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
@@ -92,6 +94,10 @@ public class CalendarDayPanel extends JPanel {
 		JPopupMenu dayMenu = new JPopupMenu();
 		
 		JMenuItem showTasksItem = new JMenuItem("Show pending tasks");
+		showTasksItem.addActionListener(e -> {
+			TaskController.displayTaskListOnDate(mainContent, LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth));
+		});
+		
 		JMenuItem clearTaskItem = new JMenuItem("Clear all tasks");
 		
 		dayMenu.add(showTasksItem);
