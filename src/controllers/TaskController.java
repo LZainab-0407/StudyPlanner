@@ -2,27 +2,18 @@ package controllers;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Font;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import com.toedter.calendar.JDateChooser;
 
 import data.TaskManager;
 import models.PriorityLevel;
@@ -106,9 +97,11 @@ public class TaskController{
 	public static void displayTaskList(JPanel mainContent) {
 		mainContent.removeAll();
 		JLabel pendingTasksLabel = new JLabel("Pending Tasks", SwingConstants.CENTER);
+		pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 		mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
 		
-		TaskListPanel taskListPanel = new TaskListPanel(mainContent);
+		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
+		TaskListPanel taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasks());
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);
 		mainContent.add(taskListPane, BorderLayout.CENTER);
 		mainContent.revalidate();
