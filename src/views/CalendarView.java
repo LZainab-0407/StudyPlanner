@@ -105,18 +105,23 @@ public class CalendarView extends JPanel{
 		for(int day = 1; day <= daysInMonth; day++) {
 			int finalDay = day; // for use in lambda expression
 			
-			JButton dayButton = new JButton(String.valueOf(day));
-			dayButton.setHorizontalAlignment(SwingConstants.RIGHT);
-			dayButton.setVerticalAlignment(SwingConstants.TOP);
+			// create CalendarDayPanel class and add panel with a button instead of a button 
+			// (add cancel button on login & signup frames)
+			// ********************************************************************
+//			JButton dayButton = new JButton(String.valueOf(day));
+//			dayButton.setHorizontalAlignment(SwingConstants.RIGHT);
+//			dayButton.setVerticalAlignment(SwingConstants.TOP);
+			// ********************************************************************
 			
-			dayButton.setFocusPainted(false);
-			dayButton.setMargin(new Insets(5, 5, 5, 5));
-			dayButton.addActionListener(e -> {
-				LocalDate selectedDate = currentMonth.atDay(finalDay);
-				// display tasks due on this day
-				
-			});
-			calendarGrid.add(dayButton);
+//			dayButton.setFocusPainted(false);
+//			dayButton.setMargin(new Insets(5, 5, 5, 5));
+//			dayButton.addActionListener(e -> {
+//				LocalDate selectedDate = currentMonth.atDay(finalDay);
+//				// display tasks due on this day
+//				
+//			});
+			CalendarDayPanel dayPanel = new CalendarDayPanel(day);
+			calendarGrid.add(dayPanel);
 		}
 		
 		this.add(calendarGrid, BorderLayout.CENTER);

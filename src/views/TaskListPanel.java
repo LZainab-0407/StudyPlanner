@@ -8,11 +8,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,15 +24,19 @@ import models.PriorityLevel;
 import models.Task;
 import models.UserSession;
 
+/**
+ * Represents a task list panel that shows all tasks in the list tasks,
+ * along with button to mark it complete, delete it, or edit it.
+ */
 public class TaskListPanel extends JPanel{
 	JPanel mainContentPanel;
 	
-	public TaskListPanel(JPanel mainContentPanel) {
+	public TaskListPanel(JPanel mainContentPanel, ArrayList<Task> tasks) {
 		this.setLayout(new GridLayout(TaskManager.getTasks().size() + 2, 1, 5, 5));
 		this.mainContentPanel = mainContentPanel;
 
-		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
-		for(Task task : TaskManager.getTasks()) {
+		//TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
+		for(Task task : tasks) {
 			
 			JPanel taskPanel = new JPanel(new GridBagLayout());
 			
@@ -50,7 +54,13 @@ public class TaskListPanel extends JPanel{
 			setPriorityColor(task, taskArea);
 			
 			JPanel statusPanel = new JPanel();
-			JLabel statusLabel = new JLabel(task.getStatus());
+			String status = task.getStatus();
+			JLabel statusLabel = new JLabel(status);
+			switch (status){
+			case "Completed!": statusLabel.setForeground(new Color(0x008000)); break;
+			case "Overdue!": statusLabel.setForeground(new Color(0xff2400)); break;
+			}
+			
 			statusPanel.add(statusLabel);
 			
 			JPanel boxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -80,7 +90,7 @@ public class TaskListPanel extends JPanel{
 			
 			
 			JPanel deleteButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			JButton deleteButton = generateIconOnlyButton("Delete task", new ImageIcon("Resources/icons/delete.png"));
+			JButton deleteButton = new IconOnlyButton("Delete task", new ImageIcon("Resources/icons/delete.png"));
 			deleteButtonPanel.add(deleteButton);
 			deleteButton.addActionListener(e -> {
 				TaskManager.deleteTask(task);
@@ -89,7 +99,7 @@ public class TaskListPanel extends JPanel{
 			});
 			
 			JPanel editButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			JButton editButton = generateIconOnlyButton("Edit task", new ImageIcon("Resources/icons/edit.png"));
+			JButton editButton = new IconOnlyButton("Edit task", new ImageIcon("Resources/icons/edit.png"));
 			editButtonPanel.add(editButton);
 			editButton.addActionListener(e -> {
 				TaskController.editTask(task, taskInfoPanel, mainContentPanel);
@@ -135,42 +145,20 @@ public class TaskListPanel extends JPanel{
 	 * @param task
 	 * @param taskArea
 	 */
-	public static void setPriorityColor(Task task, JTextArea taskArea) {
+	private void setPriorityColor(Task task, JTextArea taskArea) {
 		switch (task.getPriorityLevel()) {
 		case PriorityLevel.HIGH: 
 			taskArea.setBackground(new Color(0xe97f7f));
 			break;
 		case PriorityLevel.MEDIUM: 
-			taskArea.setBackground(Color.orange);
+			taskArea.setBackground(new Color(0xff9100));
 			break;
 		case PriorityLevel.LOW: 
-			taskArea.setBackground(Color.yellow);
+			taskArea.setBackground(new Color(0xf4c430));
 			break;
 		}
 	}
 	
-	/**
-	 * Creates a small, transparent icon-only JButton with a tooltip.
-	 * <p>
-	 * This button has no border, background, or focus highlight, making it ideal
-	 * for minimalist UI designs with image-based actions (e.g. delete, edit).
-	 * The button is sized to 20x20 pixels and includes a tooltip for accessibility.
-	 *
-	 * @param toolTipText the tooltip text displayed on hover (e.g. "Delete Task")
-	 * @param icon the ImageIcon to be used for the button
-	 * @return a configured JButton with only the given icon
-	 */
-	public static JButton generateIconOnlyButton(String toolTipText, ImageIcon icon) {
-		JButton iconOnlyButton = new JButton(icon);
-		iconOnlyButton.setFocusable(false);
-		iconOnlyButton.setContentAreaFilled(false);
-		iconOnlyButton.setBorderPainted(false);
-		iconOnlyButton.setFocusPainted(false);
-		iconOnlyButton.setOpaque(false);
-		iconOnlyButton.setToolTipText(toolTipText);
-		iconOnlyButton.setPreferredSize(new Dimension(20, 20));
-		iconOnlyButton.setFocusable(false);
-		return iconOnlyButton;
-	}
+	
 	
 }
