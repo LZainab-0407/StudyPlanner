@@ -57,6 +57,37 @@ public class TaskManager {
 		return tasks;
 	}
 	
+	public static ArrayList<Task> getFilteredTasks(String keyword, PriorityLevel priorityLevel, String status){
+		ArrayList<Task> filteredTasks = new ArrayList<>();
+		
+		
+		for(Task task: taskList) {
+			boolean matches = true;
+			
+			if(keyword != null && !keyword.isBlank() && !keyword.isEmpty()){
+				if (!task.getTitle().toLowerCase().contains(keyword.toLowerCase()) && 
+						!task.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+					matches = false;
+				}
+			}
+					
+			if(priorityLevel != null && !task.getPriorityLevel().equals(priorityLevel)) {
+				matches = false;
+			}
+			
+			//*************************  might have to be changed  ***************************************
+			if(status != null && !task.getStatus().toLowerCase().contains(status.toLowerCase())) {
+				matches = false;
+			}
+			
+			if (matches) {
+				filteredTasks.add(task);
+			}
+		}
+		
+		return filteredTasks;
+	}
+	
 	/**
 	 * Rearranges task list according to priority level.
 	 * high priority tasks are at the top'
@@ -116,7 +147,7 @@ public class TaskManager {
         taskList.clear();
     }
     
-    /*
+    /**
      * removes current task from task list
      */
     public static void deleteTask(Task task) {

@@ -23,6 +23,7 @@ import controllers.TaskController;
 import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
+import models.UserSession;
 
 /**
  * A single day panel used in the calendar view.
@@ -93,15 +94,34 @@ public class CalendarDayPanel extends JPanel {
 	private JPopupMenu generatePopupMenu() {
 		JPopupMenu dayMenu = new JPopupMenu();
 		
-		JMenuItem showTasksItem = new JMenuItem("Show pending tasks");
+		LocalDate date = LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth);
+		
+		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskListOnDate(mainContent, LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth));
+			TaskController.displayTaskListOnDate(mainContent, date);
 		});
 		
-		JMenuItem clearTaskItem = new JMenuItem("Clear all tasks");
+		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
+		deleteTaskItem.addActionListener(e -> {
+			for (Task t : TaskManager.getTasksOnDate(date)) {
+				TaskManager.deleteTask(t);
+				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
+			}
+		});
+		
+		JMenuItem completeTaskItem = new JMenuItem("Complete all tasks");
+		completeTaskItem.addActionListener(e ->{
+			for (Task t: TaskManager.getTasksOnDate(date)) {
+				t.setCompleted(true);
+				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
+			}
+		});
 		
 		dayMenu.add(showTasksItem);
-		dayMenu.add(clearTaskItem);
+		dayMenu.add(deleteTaskItem);
+		dayMenu.add(completeTaskItem);
 		
 		return dayMenu;
 	}

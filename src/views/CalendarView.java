@@ -3,7 +3,6 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -11,8 +10,8 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -28,14 +27,12 @@ public class CalendarView extends JPanel{
 	private JPanel mainContent;
 	
 	public CalendarView(JPanel mainContent){
-		// this.parentFrame = parentFrame;
 		this.setLayout(new BorderLayout());
 		this.currentMonth = YearMonth.now();
 		this.mainContent = mainContent;
 		
 		addHeader();
 		drawCalendar();
-		
 	}
 	
 
@@ -50,8 +47,7 @@ public class CalendarView extends JPanel{
 										SwingConstants.CENTER);
 		monthLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
 		
-		JButton prevMonthButton = new JButton("←");
-		prevMonthButton.setFocusable(false);
+		JButton prevMonthButton = new IconOnlyButton("Previous month", new ImageIcon("Resources/icons/left_arrow.png"));;
 		prevMonthButton.addActionListener(e -> {
 			currentMonth = currentMonth.minusMonths(1);
 			monthLabel.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + 
@@ -59,8 +55,7 @@ public class CalendarView extends JPanel{
 			updateCalendar();
 		});
 		
-		JButton nextMonthButton = new JButton("→");
-		nextMonthButton.setFocusable(false);
+		JButton nextMonthButton = new IconOnlyButton("Next month", new ImageIcon("Resources/icons/right_arrow.png"));
 		nextMonthButton.addActionListener(e -> {
 			currentMonth = currentMonth.plusMonths(1);
 			monthLabel.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + 
@@ -106,21 +101,6 @@ public class CalendarView extends JPanel{
 		for(int day = 1; day <= daysInMonth; day++) {
 			int finalDay = day; // for use in lambda expression
 			
-			// create CalendarDayPanel class and add panel with a button instead of a button 
-			// (add cancel button on login & signup frames)
-			// ********************************************************************
-//			JButton dayButton = new JButton(String.valueOf(day));
-//			dayButton.setHorizontalAlignment(SwingConstants.RIGHT);
-//			dayButton.setVerticalAlignment(SwingConstants.TOP);
-			// ********************************************************************
-			
-//			dayButton.setFocusPainted(false);
-//			dayButton.setMargin(new Insets(5, 5, 5, 5));
-//			dayButton.addActionListener(e -> {
-//				LocalDate selectedDate = currentMonth.atDay(finalDay);
-//				// display tasks due on this day
-//				
-//			});
 			CalendarDayPanel dayPanel = new CalendarDayPanel(day, currentMonth, mainContent);
 			calendarGrid.add(dayPanel);
 		}
