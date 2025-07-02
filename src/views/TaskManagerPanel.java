@@ -16,16 +16,16 @@ import data.TaskManager;
 import models.UserSession;
 
 public class TaskManagerPanel extends JPanel{
-	JFrame parentFrame;
+	JFrame parent;
 	
 	public TaskManagerPanel(JPanel mainContent, JFrame parent){
-		this.parentFrame = parentFrame;
+		this.parent = parent;
 		this.setPreferredSize(new Dimension(50, 500));
 		
 		this.setLayout(new GridLayout(6, 1, 0, 2));
 		
 		JButton addNewTaskButton = new IconOnlyButton("Add new task", new ImageIcon("Resources/icons/add_task.png"));
-		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parentFrame, mainContent));
+		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parent, mainContent, ViewContext.CALENDAR));
 		
 		JButton sortTasksButton = new IconOnlyButton("Sort task list", new ImageIcon("Resources/icons/sort.png"));
 		sortTasksButton.addActionListener(e -> {

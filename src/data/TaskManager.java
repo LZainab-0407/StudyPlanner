@@ -13,7 +13,7 @@ import models.Task;
 
 public class TaskManager {
 	private static ArrayList<Task> taskList = new ArrayList<Task>();
-	private static ArrayList<Task> completedTaskList = new ArrayList<Task>();
+	private static ArrayList<Task> latestFilteredTasks = new ArrayList<Task>();
 	
 	/**
      * Adds a new task to the current task list in memory.
@@ -30,10 +30,10 @@ public class TaskManager {
 	}
 	
 	 /**
-     * Returns the list of tasks currently in memory.
+     * 
      */
-	public static ArrayList<Task> getCompletedTasks(){
-		return completedTaskList;
+	public static ArrayList<Task> getLatestFilteredTasks(){
+		return latestFilteredTasks;
 	}
 	
 	/**
@@ -57,10 +57,9 @@ public class TaskManager {
 		return tasks;
 	}
 	
-	public static ArrayList<Task> getFilteredTasks(String keyword, PriorityLevel priorityLevel, String status){
-		ArrayList<Task> filteredTasks = new ArrayList<>();
-		
-		
+	public static void setFilteredTasks(String keyword, PriorityLevel priorityLevel, String status){
+		latestFilteredTasks.clear();
+	
 		for(Task task: taskList) {
 			boolean matches = true;
 			
@@ -81,11 +80,10 @@ public class TaskManager {
 			}
 			
 			if (matches) {
-				filteredTasks.add(task);
+				latestFilteredTasks.add(task);
 			}
 		}
 		
-		return filteredTasks;
 	}
 	
 	/**
