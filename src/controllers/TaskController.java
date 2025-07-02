@@ -142,8 +142,7 @@ public class TaskController{
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		buttonPanel.setPreferredSize(new Dimension(500, 50));
 		
-		JButton backButton = new IconOnlyButton("Go back", new ImageIcon("Resources/icons/back.png"));
-		backButton.setPreferredSize(new Dimension(35, 35));
+		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back.png"));
 		backButton.addActionListener(e -> {
 			CalendarController.displayCalendar(mainContent);
 		});
@@ -160,7 +159,7 @@ public class TaskController{
      * @param mainContent  the main content panel
      * @param date         the date to re-display tasks for
      */
-	public static void refreshTaskListOnDate(JPanel mainContent, LocalDate date) {
+	private static void refreshTaskListOnDate(JPanel mainContent, LocalDate date) {
 		displayTaskListOnDate(mainContent, date);
 	}
 	
@@ -169,7 +168,7 @@ public class TaskController{
      *
      * @param mainContent the panel to be refreshed
      */
-	public static void refreshTaskList(JPanel mainContent) {
+	private static void refreshTaskList(JPanel mainContent) {
 		displayTaskList(mainContent);
 	}
 	

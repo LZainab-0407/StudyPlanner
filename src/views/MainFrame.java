@@ -1,8 +1,10 @@
 package views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,8 +24,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(1000, 600);
-		this.setLayout(new BorderLayout());
-		this.setLocationRelativeTo(null);
+		this.setLayout(new BorderLayout(20, 20));
 		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(new Dimension(150, 500));
@@ -42,6 +43,7 @@ public class MainFrame extends JFrame {
 		JPanel rightPanel = generateRightPanel(this, mainContent);
 		this.add(rightPanel, BorderLayout.EAST);
 		
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 	
@@ -56,11 +58,12 @@ public class MainFrame extends JFrame {
     */
 	public static JPanel generateRightPanel(JFrame mainFrame, JPanel mainContent) {
 		JPanel rightPanel = new JPanel();
-		rightPanel.setPreferredSize(new Dimension(150, 500));
-		rightPanel.setLayout(new BorderLayout());
+		rightPanel.setPreferredSize(new Dimension(100, 500));
+		rightPanel.setLayout(new BorderLayout(10, 10));
+		//rightPanel.setBorder(BorderFactory.createLineBorder(new Color(0x0077D1), 2));
 		
 		// Task manager controls (add task, sort task)
-		TaskManagerPanel taskManagerPanel = new TaskManagerPanel(mainContent);
+		TaskManagerPanel taskManagerPanel = new TaskManagerPanel(mainContent, mainFrame);
 		rightPanel.add(taskManagerPanel, BorderLayout.NORTH);
 		
 		// Logout button
