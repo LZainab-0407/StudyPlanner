@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -41,7 +42,7 @@ public class TaskController{
      * @param parentFrame  the parent frame to center the popup on
      * @param mainContent  the main content panel to refresh after task creation
      */
-	public static void addNewTask(JFrame parentFrame, JPanel mainContent) {
+	public static void addNewTask(JFrame parentFrame, JPanel mainContent, ViewContext view) {
 		
 		JFrame inputFrame = new JFrame("Add New Task");
 		inputFrame.setSize(500, 500);
@@ -90,7 +91,7 @@ public class TaskController{
 			JOptionPane.showMessageDialog(inputFrame, "New task added!");
 			inputFrame.dispose();
 			
-			refreshTaskList(mainContent);
+			refresh(mainContent, view, null);
 		});
 		
 		// cancel button logic: close window
@@ -161,6 +162,7 @@ public class TaskController{
      */
 	private static void refreshTaskListOnDate(JPanel mainContent, LocalDate date) {
 		displayTaskListOnDate(mainContent, date);
+		
 	}
 	
 	 /**
@@ -172,18 +174,21 @@ public class TaskController{
 		displayTaskList(mainContent);
 	}
 	
+	
 	 /**
      * Refreshes the main content panel depending on the given view context.
      *
-     * @param mainContent the panel to update
-     * @param view        the current UI view context
-     * @param date        (optional) relevant date if the view context is date-based
+     * @param mainContent   the panel to update
+     * @param view          the current UI view context
+     * @param date          (optional) relevant date if the view context is date-based, null otherwise
+     * @param searchResults (optional) if the view context is search-based, null otherwise 
      */
 	public static void refresh(JPanel mainContent, ViewContext view, LocalDate date) {
 		switch (view) {
 		case ViewContext.TASK_LIST: refreshTaskList(mainContent); break;
 		case ViewContext.TASK_LIST_ON_DATE: refreshTaskListOnDate(mainContent, date); break;
 		case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
+		case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
 		default:
 			break;
 		}
