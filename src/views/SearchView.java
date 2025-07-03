@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -26,16 +27,51 @@ import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
 
+/**
+ * The {@code SearchView} class provides a user interface panel for
+ * searching and filtering tasks based on keyword, priority, and status.
+ * It includes a search bar, a filter dialog, and a task result panel.
+ *
+ * <p>When the user types a keyword or applies filter options, the matching
+ * tasks are displayed in a scrollable list. This view integrates with the
+ * {@code TaskManager} and {@code TaskController} to update the task display.</p>
+ *
+ * <p>This class follows MVC principles and is designed to sit within the
+ * main content area of the application.</p>
+ *
+ * @author Labibah Zainab
+ */
 public class SearchView extends JPanel{
+	/** Top panel containing search field and buttons */
 	JPanel searchPanel;
+	
+	/** Panel to display the search result task list */
 	JPanel searchResultPanel;
+	
+	/** The parent frame, used for centering dialogs */
 	private JFrame parent;
+	
+	/** Text field for entering the keyword to search */
 	private JTextField keywordField;
+	
+	/** Icon button to trigger search */
 	private IconOnlyButton searchButton;
+	
+	/** Icon button to open the filter dialog */
 	private IconOnlyButton filterButton;
+	
+	/** Combo box for selecting task priority filter */
 	private JComboBox<PriorityLevel> priorityBox;
+	
+	/** Combo box for selecting task status filter */
 	private JComboBox<String> statusBox;
 	
+	/**
+     * Constructs a new {@code SearchView} and sets up its UI components.
+     *
+     * @param mainContent the main content panel where the view resides
+     * @param parent      the parent frame, used for centering popups
+     */
 	public SearchView(JPanel mainContent, JFrame parent) {
 		this.parent = parent;
 		this.setLayout(new BorderLayout(10, 10));
@@ -48,6 +84,16 @@ public class SearchView extends JPanel{
 		
 	}
 	
+	/**
+     * Creates and returns the search panel that contains:
+     * - back button for going back to the main calendar dashboard
+     * - keyword text field
+     * - search button
+     * - filter button
+     *
+     * @param mainContent the main content area for navigation
+     * @return configured search input panel
+     */
 	private JPanel generateSearchPanel(JPanel mainContent) {
 		JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5 ));
 		
@@ -59,12 +105,14 @@ public class SearchView extends JPanel{
 			CalendarController.displayCalendar(mainContent);
 		});
 		
+		// placeholder keyword field
 		keywordField = new JTextField(50);
 		String placeholder = "Enter keyword...";
 		keywordField.setForeground(Color.GRAY);
 		keywordField.setFont(new Font("SansSerif", Font.ITALIC, 12));
 		keywordField.setText(placeholder);
-		// remove placeholder on focus
+		
+		// handle placeholder appearance
 		keywordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -76,7 +124,7 @@ public class SearchView extends JPanel{
 			}
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(keywordField.getText().isEmpty()) {
+				if(keywordField.getText().trim().isEmpty()) {
 					keywordField.setForeground(Color.GRAY);
 					keywordField.setFont(new Font("SansSerif", Font.ITALIC, 12));
 					keywordField.setText(placeholder);
@@ -84,12 +132,20 @@ public class SearchView extends JPanel{
 			}
 		});
 		
+		// search button functionality
 		searchButton = new IconOnlyButton("Search", new ImageIcon("Resources/icons/search-30.png"));
 		searchButton.addActionListener(e -> {
-			TaskManager.setFilteredTasks(keywordField.getText(), null, null);
+			if(keywordField.getText().trim().isBlank() ||
+					keywordField.getText().equalsIgnoreCase("Enter keyword...")) {
+				JOptionPane.showMessageDialog(null, "Please enter a keyword for your search,"
+						+ " or enter 'all' for all tasks.");
+				return;
+			}
+			TaskManager.setFilteredTasks(keywordField.getText(), null, 0);
 			TaskController.refresh(searchResultPanel, ViewContext.SEARCH, null);
 		});
 		
+		// filter button functionality
 		filterButton = new IconOnlyButton("Filter", new ImageIcon("Resources/icons/filter-30.png"));
 		filterButton.addActionListener(e -> {
 			openFilterDialog();
@@ -103,6 +159,14 @@ public class SearchView extends JPanel{
 		return searchPanel;
 	}
 	
+	 /**
+     * Opens a modal filter dialog where users can:
+     * - enter a keyword 
+     * - filter by priority
+     * - filter by task status (overdue, due today, etc.)
+     *
+     * After clicking "Apply", tasks are filtered and displayed.
+     */
 	private void openFilterDialog() {
 		JDialog filterDialog = new JDialog(parent, "Filter tasks", true);
 		filterDialog.setLayout(new BorderLayout(20,20));
@@ -110,9 +174,16 @@ public class SearchView extends JPanel{
 		filterDialog.setSize(new Dimension(350, 300));
 		filterDialog.setLocationRelativeTo(parent);
 		
-		JPanel filterPanel = new JPanel(new GridLayout(3,2,10,10));
+		JPanel filterPanel = new JPanel(new GridLayout(4,2,10,10));
 		
-		// add priorityBox
+		// add keywordField set to text from search panel kewword field
+		JLabel keywordLabel = new JLabel("Keyword: ");
+		filterPanel.add(keywordLabel);
+		JTextField filterKeywordField = new JTextField(10);
+		filterKeywordField.setText(keywordField.getText());
+		filterPanel.add(filterKeywordField);
+		
+		// add priorityBox (drop-down)
 		JLabel priorityLevelLabel = new JLabel("Priority Level: ");
 		filterPanel.add(priorityLevelLabel);
 		priorityBox = new JComboBox<>(PriorityLevel.values());
@@ -120,23 +191,33 @@ public class SearchView extends JPanel{
 		priorityBox.setSelectedIndex(0);
 		filterPanel.add(priorityBox);
 		
-		// add statusBox
+		// add statusBox (drop-down)
 		JLabel statusLabel = new JLabel("Status: ");
 		filterPanel.add(statusLabel);
-		String[] statuses = {"Completed", "Overdue", "Due today", "Due in 7 days", "Due in 30 days"};
+		String[] statuses = {"Overdue", "Due today", "Due in 7 days", "Due in 14 days" , "Due in 30 days"};
 		statusBox = new JComboBox<>(statuses);
 		statusBox.insertItemAt(null, 0);
 		statusBox.setSelectedIndex(0);
 		filterPanel.add(statusBox);
 		
-		JButton applyButton = new JButton("  Apply");
+		// apply button for applying filters
+		JButton applyButton = new JButton("Apply");
 		applyButton.setFocusable(false);
 		applyButton.addActionListener(e -> {
-			
+			if(keywordField.getText().trim().isBlank() ||
+					keywordField.getText().equalsIgnoreCase("Enter keyword...")) {
+				JOptionPane.showMessageDialog(null, "Please enter a keyword for your search,"
+						+ " or enter 'all' for all tasks.");
+				return;
+			}
+			TaskManager.setFilteredTasks(filterKeywordField.getText(), 
+					(PriorityLevel) priorityBox.getSelectedItem(), statusBox.getSelectedIndex());
+			TaskController.refresh(searchResultPanel, ViewContext.SEARCH, null);
 		});
 		filterPanel.add(applyButton);
 		
-		JButton cancelButton = new JButton("  Cancel");
+		// cancel button (filter dialog disappears going back to original search view)
+		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setFocusable(false);
 		cancelButton.addActionListener(e -> {
 			filterDialog.dispose();

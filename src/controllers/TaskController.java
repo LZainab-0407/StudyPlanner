@@ -174,12 +174,12 @@ public class TaskController{
 	 */
 	public static void refresh(JPanel mainContent, ViewContext view, LocalDate date) {
 		switch (view) {
-		case ViewContext.TASK_LIST: refreshTaskList(mainContent, null); break;
-		case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date); break;
-		case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
-		case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
-		default:
-			break;
+			case ViewContext.TASK_LIST: refreshTaskList(mainContent, null); break;
+			case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date); break;
+			case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
+			case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
+			default:
+				break;
 		}
 	}
 	
@@ -220,7 +220,7 @@ public class TaskController{
 				return; // return from action performed method
 			}
 			task.setDeadline(inputPanel.getDeadlineFromPicker());
-			
+
 			changeFrame.dispose();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			refresh(mainContent, view, task.getDeadline());
