@@ -3,40 +3,44 @@ package views;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import controllers.SearchController;
 import controllers.TaskController;
 import data.TaskManager;
 import models.UserSession;
 
 public class TaskManagerPanel extends JPanel{
-	JButton addNewTaskButton;
-	JFrame parentFrame;
+	JFrame parent;
 	
-	public TaskManagerPanel(JPanel mainContent){
-//		this.parentFrame = parentFrame;
-		this.setPreferredSize(new Dimension(150, 500));
+	public TaskManagerPanel(JPanel mainContent, JFrame parent){
+		this.parent = parent;
+		this.setPreferredSize(new Dimension(50, 500));
 		
-		this.setLayout(new GridLayout(10, 1));
+		this.setLayout(new GridLayout(6, 1, 0, 2));
 		
-		addNewTaskButton = new JButton("Add New Task");
-		addNewTaskButton.setFocusable(false);
-		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parentFrame, mainContent));
+		JButton addNewTaskButton = new IconOnlyButton("Add to task list", new ImageIcon("Resources/icons/add_task.png"));
+		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parent, mainContent, ViewContext.TASK_LIST));
 		
-		JButton sortTasksButton = new JButton("Sort Task List");
-		sortTasksButton.setFocusable(false);
+		JButton sortTasksButton = new IconOnlyButton("Sort task list", new ImageIcon("Resources/icons/sort.png"));
 		sortTasksButton.addActionListener(e -> {
 			JPopupMenu options = generatePopupMenu(mainContent);
 			options.show(sortTasksButton, 0, sortTasksButton.getHeight());
 		});
 		
+		JButton searchButton = new IconOnlyButton("Search tasks", new ImageIcon("Resources/icons/search.png"));
+		searchButton.addActionListener(e -> {
+			SearchController.displaySearchView(mainContent, parent);
+		});
+		
 		this.add(addNewTaskButton);
 		this.add(sortTasksButton);
+		this.add(searchButton);
 	}
 	
 	/**
@@ -59,14 +63,14 @@ public class TaskManagerPanel extends JPanel{
 		byPriorityItem.addActionListener(e -> {
 			TaskManager.prioritizeTaskList();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refreshTaskList(mainContent);
+			TaskController.refresh(mainContent, ViewContext.TASK_LIST, null);
 		});
 		
 		JMenuItem byDeadlineItem = new JMenuItem("By Deadline");
 		byDeadlineItem.addActionListener(e -> {
 			TaskManager.sortTasksByDeadline();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refreshTaskList(mainContent);
+			TaskController.refresh(mainContent, ViewContext.TASK_LIST, null);
 		});
 		
 		sortOptions.add(byPriorityItem);
