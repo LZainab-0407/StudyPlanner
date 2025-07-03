@@ -45,4 +45,8 @@ public class CalendarController {
 	public static void refreshCalendar(JPanel mainContent) {
 		displayCalendar(mainContent);
 	}
+	
+	public static void refreshDotPopUp() {
+		
+	}
 }
