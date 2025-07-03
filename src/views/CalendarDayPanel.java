@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 
@@ -18,9 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 
+import controllers.TaskController;
 import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
+import models.UserSession;
 
 /**
  * A single day panel used in the calendar view.
@@ -91,11 +94,37 @@ public class CalendarDayPanel extends JPanel {
 	private JPopupMenu generatePopupMenu() {
 		JPopupMenu dayMenu = new JPopupMenu();
 		
-		JMenuItem showTasksItem = new JMenuItem("Show pending tasks");
-		JMenuItem clearTaskItem = new JMenuItem("Clear all tasks");
+		LocalDate date = LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth);
+		
+		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
+		showTasksItem.addActionListener(e -> {
+			TaskController.displayTaskList(mainContent, date);
+		});
+		
+		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
+		deleteTaskItem.addActionListener(e -> {
+			for (Task t : TaskManager.getTasksOnDate(date)) {
+				TaskManager.deleteTask(t);
+				if(TaskManager.getLatestFilteredTasks().contains(t)) {
+					TaskManager.getLatestFilteredTasks().remove(t);
+				}
+				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
+			}
+		});
+		
+		JMenuItem completeTaskItem = new JMenuItem("Complete all tasks");
+		completeTaskItem.addActionListener(e ->{
+			for (Task t: TaskManager.getTasksOnDate(date)) {
+				t.setCompleted(true);
+				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
+			}
+		});
 		
 		dayMenu.add(showTasksItem);
-		dayMenu.add(clearTaskItem);
+		dayMenu.add(deleteTaskItem);
+		dayMenu.add(completeTaskItem);
 		
 		return dayMenu;
 	}

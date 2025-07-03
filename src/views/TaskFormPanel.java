@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -56,8 +57,12 @@ public class TaskFormPanel extends JPanel {
 		this.add(descriptionLabel, gbc);
 		
 		// second row, second column
-		descriptionArea = new JTextArea(4, 10);
+		descriptionArea = new JTextArea(4, 20);
+		descriptionArea.setLineWrap(true);
+		descriptionArea.setWrapStyleWord(true);
 		JScrollPane scrollPane = new JScrollPane(descriptionArea);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		gbc.gridx = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(scrollPane, gbc);

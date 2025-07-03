@@ -10,6 +10,7 @@ import views.SignUpFrame;
  * and handling major transitions between views, such as login → main UI.
  */
 public class AppController {
+
 	/**
      * Starts the application by launching the login screen.
      * Called from Main.java at startup.

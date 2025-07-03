@@ -2,6 +2,7 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -73,12 +74,10 @@ public class SignUpFrame extends JFrame {
 		        
 		this.add(centerPanel, BorderLayout.CENTER);
 		
-		JPanel bottomPanel = new JPanel();
+		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		
 		JButton submitButton = new JButton("Submit");
 		submitButton.setFocusable(false);
-		bottomPanel.add(submitButton);
-		this.add(bottomPanel, BorderLayout.SOUTH);
-		
 		submitButton.addActionListener(e -> {
 			String username = usernameField.getText();
 			String password = passwordField.getText();
@@ -91,6 +90,17 @@ public class SignUpFrame extends JFrame {
 				JOptionPane.showMessageDialog(this, "Username taken. Please choose a different username.");
 			}
 		});
+		bottomPanel.add(submitButton);
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setFocusable(false);
+		cancelButton.addActionListener(e -> {
+			this.dispose();
+			new LogInFrame();
+		});
+		bottomPanel.add(cancelButton);
+		
+		this.add(bottomPanel, BorderLayout.SOUTH);
 		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(new Dimension(100, 500));

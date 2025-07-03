@@ -30,7 +30,7 @@ public class IconOnlyButton extends JButton{
 		this.setFocusPainted(false);
 		this.setOpaque(false);
 		this.setToolTipText(toolTipText);
-		this.setPreferredSize(new Dimension(20, 20));
+		this.setPreferredSize(new Dimension(30, 30));
 		this.setFocusable(false);
 	}
 }
