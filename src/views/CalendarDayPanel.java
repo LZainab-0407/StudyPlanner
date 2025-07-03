@@ -98,13 +98,16 @@ public class CalendarDayPanel extends JPanel {
 		
 		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskListOnDate(mainContent, date);
+			TaskController.displayTaskList(mainContent, date);
 		});
 		
 		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
 		deleteTaskItem.addActionListener(e -> {
 			for (Task t : TaskManager.getTasksOnDate(date)) {
 				TaskManager.deleteTask(t);
+				if(TaskManager.getLatestFilteredTasks().contains(t)) {
+					TaskManager.getLatestFilteredTasks().remove(t);
+				}
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
 			}

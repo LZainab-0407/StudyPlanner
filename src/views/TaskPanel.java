@@ -94,6 +94,9 @@ public class TaskPanel extends JPanel{
 		deleteButtonPanel.add(deleteButton);
 		deleteButton.addActionListener(e -> {
 			TaskManager.deleteTask(task);
+			if(TaskManager.getLatestFilteredTasks().contains(task)) {
+				TaskManager.getLatestFilteredTasks().remove(task);
+			}
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			TaskController.refresh(mainContent, view, task.getDeadline());
 		});

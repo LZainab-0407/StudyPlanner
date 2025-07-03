@@ -99,43 +99,37 @@ public class TaskController{
 	}
 	
 	/**
-	 * Displays the task list panel in the main content area.
+	 * Displays a task list in the main content area.
 	 * <p>
-	 * This method clears the mainContent panel and replaces it with a
-	 * scrollable list of tasks, along with a header label at the top.
+	 * This method clears and updates the {@code mainContent} panel with a scrollable
+	 * list of tasks. If a {@code date} is provided, only tasks due on that date
+	 * will be shown. If {@code date} is {@code null}, all tasks for the user are displayed.
+	 * A header label and a "Back to Calendar" button are also added to the view.
 	 *
-	 * @param mainContent the panel to be populated with the task list view
+	 * @param mainContent the panel in the main frame where content should be shown
+	 * @param date        the specific date to filter tasks by, or {@code null} to show all tasks
 	 */
-	public static void displayTaskList(JPanel mainContent) {
+	public static void displayTaskList(JPanel mainContent, LocalDate date) {
 		mainContent.removeAll();
-		JLabel pendingTasksLabel = new JLabel("Pending Tasks", SwingConstants.CENTER);
-		pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-		mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
+		TaskListPanel taskListPanel;
 		
-		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
-		TaskListPanel taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasks(), ViewContext.TASK_LIST);
-		
-		JScrollPane taskListPane = new JScrollPane(taskListPanel);
-		mainContent.add(taskListPane, BorderLayout.CENTER);
-		mainContent.revalidate();
-	    mainContent.repaint();
-	}
-	
-	 /**
-     * Displays the list of tasks that are due on a specific date.
-     *
-     * @param mainContent  the panel to update
-     * @param date         the specific date for which tasks should be displayed
-     */
-	public static void displayTaskListOnDate(JPanel mainContent, LocalDate date) {
-		mainContent.removeAll();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-		JLabel pendingTasksLabel = new JLabel("Tasks due on " + date.format(formatter), SwingConstants.CENTER);
-		pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-		mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
-		
-		TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
-		TaskListPanel taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasksOnDate(date), ViewContext.TASK_LIST_ON_DATE);
+		if(date != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+			JLabel pendingTasksLabel = new JLabel("Tasks due on " + date.format(formatter), SwingConstants.CENTER);
+			pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+			mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
+			
+			TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
+			taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasksOnDate(date), ViewContext.TASK_LIST_ON_DATE);
+		}
+		else {
+			JLabel pendingTasksLabel = new JLabel("Pending Tasks", SwingConstants.CENTER);
+			pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+			mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
+			
+			TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
+			taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasks(), ViewContext.TASK_LIST);
+		}
 		
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);
 		mainContent.add(taskListPane, BorderLayout.CENTER);
@@ -148,45 +142,40 @@ public class TaskController{
 			CalendarController.displayCalendar(mainContent);
 		});
 		buttonPanel.add(backButton);
-		mainContent.add(buttonPanel, BorderLayout.SOUTH);
 		
+		mainContent.add(buttonPanel, BorderLayout.SOUTH);
 		mainContent.revalidate();
 	    mainContent.repaint();
 	}
 	
-	  /**
-     * Refreshes the view showing tasks due on a specific date.
-     *
-     * @param mainContent  the main content panel
-     * @param date         the date to re-display tasks for
-     */
-	private static void refreshTaskListOnDate(JPanel mainContent, LocalDate date) {
-		displayTaskListOnDate(mainContent, date);
+	/**
+	 * Refreshes the task list view by re-displaying the appropriate task list,
+	 * depending on whether a specific {@code date} was previously active.
+	 *
+	 * @param mainContent the panel to update
+	 * @param date        the specific date to re-display tasks for, or {@code null} for all tasks
+	 */
+	private static void refreshTaskList(JPanel mainContent, LocalDate date) {
+		displayTaskList(mainContent, date);
 		
 	}
 	
-	 /**
-     * Refreshes the full task list view.
-     *
-     * @param mainContent the panel to be refreshed
-     */
-	private static void refreshTaskList(JPanel mainContent) {
-		displayTaskList(mainContent);
-	}
 	
-	
-	 /**
-     * Refreshes the main content panel depending on the given view context.
-     *
-     * @param mainContent   the panel to update
-     * @param view          the current UI view context
-     * @param date          (optional) relevant date if the view context is date-based, null otherwise
-     * @param searchResults (optional) if the view context is search-based, null otherwise 
-     */
+	/**
+	 * Refreshes the main content panel depending on the user's current view context.
+	 * <p>
+	 * This acts as a centralized method to rerender content based on a UI event like
+	 * saving a task, deleting a task, or marking a task complete.
+	 *
+	 * @param mainContent   the main panel to refresh
+	 * @param view          the current {@code ViewContext}, which determines what to refresh
+	 * @param date          the date relevant to the view (e.g., for task list on a specific date),
+	 *                      or {@code null} if not applicable
+	 */
 	public static void refresh(JPanel mainContent, ViewContext view, LocalDate date) {
 		switch (view) {
-		case ViewContext.TASK_LIST: refreshTaskList(mainContent); break;
-		case ViewContext.TASK_LIST_ON_DATE: refreshTaskListOnDate(mainContent, date); break;
+		case ViewContext.TASK_LIST: refreshTaskList(mainContent, null); break;
+		case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date); break;
 		case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
 		case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
 		default:
