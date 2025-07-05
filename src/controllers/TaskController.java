@@ -4,9 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -24,6 +24,7 @@ import models.Task;
 import models.UserSession;
 import views.IconOnlyButton;
 import views.TaskFormPanel;
+import views.TaskListNavigationPanel;
 import views.TaskListPanel;
 import views.ViewContext;
 
@@ -108,27 +109,58 @@ public class TaskController{
 	 *
 	 * @param mainContent the panel in the main frame where content should be shown
 	 * @param date        the specific date to filter tasks by, or {@code null} to show all tasks
+	 * @param view        the current {@code ViewContext} in which the tasks are being viewed
 	 */
-	public static void displayTaskList(JPanel mainContent, LocalDate date) {
+	public static void displayTaskList(JPanel mainContent, LocalDate date, ViewContext view) {
+		UserSession.setCurrentViewContext(view);
 		mainContent.removeAll();
-		TaskListPanel taskListPanel;
+		JPanel taskListPanel = new JPanel();
 		
 		if(date != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 			JLabel pendingTasksLabel = new JLabel("Tasks due on " + date.format(formatter), SwingConstants.CENTER);
 			pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 			mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
-			
-			TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
 			taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasksOnDate(date), ViewContext.TASK_LIST_ON_DATE);
 		}
 		else {
-			JLabel pendingTasksLabel = new JLabel("Pending Tasks", SwingConstants.CENTER);
-			pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-			mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
+			JPanel topPanel = new JPanel(new BorderLayout(10, 10));
+			topPanel.setPreferredSize(new Dimension(500, 70));
 			
-			TaskManager.loadTasksForUser(UserSession.getCurrentUser().getUsername());
-			taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasks(), ViewContext.TASK_LIST);
+			TaskListNavigationPanel taskListNavigationPanel = new TaskListNavigationPanel(mainContent);
+			
+			JLabel topLabel = new JLabel("", SwingConstants.CENTER);
+			topLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+			
+			topPanel.add(taskListNavigationPanel, BorderLayout.NORTH);
+			topPanel.add(topLabel, BorderLayout.SOUTH);
+			
+			switch(view) {
+			
+			case ViewContext.TASK_LIST_ALL: 
+				topLabel.setText("Showing All Tasks");
+				taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasks(), view);
+				break;
+			
+			case ViewContext.TASK_LIST_PENDING:
+				topLabel.setText("Showing Pending Tasks");
+				taskListPanel = new TaskListPanel(mainContent, TaskManager.getPendingTasks(), view);
+				break;
+				
+			case ViewContext.TASK_LIST_COMPLETED:
+				topLabel.setText("Showing Completed Tasks");
+				taskListPanel = new TaskListPanel(mainContent, TaskManager.getCompletedTasks(), view);
+				break;
+				
+			case ViewContext.TASK_LIST_OVERDUE: 
+				topLabel.setText("Showing Overdue Tasks");
+				taskListPanel = new TaskListPanel(mainContent, TaskManager.getOverdueTasks(), view);
+				break;
+				
+			default: 
+				break;
+			}
+			mainContent.add(topPanel, BorderLayout.NORTH);
 		}
 		
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);
@@ -154,9 +186,10 @@ public class TaskController{
 	 *
 	 * @param mainContent the panel to update
 	 * @param date        the specific date to re-display tasks for, or {@code null} for all tasks
+	 * @param view        the current {@code ViewContext}, which determines what to refresh
 	 */
-	private static void refreshTaskList(JPanel mainContent, LocalDate date) {
-		displayTaskList(mainContent, date);
+	private static void refreshTaskList(JPanel mainContent, LocalDate date, ViewContext view) {
+		displayTaskList(mainContent, date, view);
 		
 	}
 	
@@ -174,8 +207,12 @@ public class TaskController{
 	 */
 	public static void refresh(JPanel mainContent, ViewContext view, LocalDate date) {
 		switch (view) {
-			case ViewContext.TASK_LIST: refreshTaskList(mainContent, null); break;
-			case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date); break;
+			case ViewContext.TASK_LIST_ALL: refreshTaskList(mainContent, null, view); break;
+			case ViewContext.TASK_LIST_PENDING: refreshTaskList(mainContent, null, view); break;
+			case ViewContext.TASK_LIST_COMPLETED:refreshTaskList(mainContent, null, view); break;
+			case ViewContext.TASK_LIST_OVERDUE:refreshTaskList(mainContent, null, view); break;
+			
+			case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date, view); break;
 			case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
 			case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
 			default:

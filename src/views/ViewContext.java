@@ -9,7 +9,13 @@ package views;
  */
 public enum ViewContext {
 	/** The task is being displayed in the main task list view. */
-	TASK_LIST,
+	TASK_LIST_ALL,
+	
+	TASK_LIST_COMPLETED,
+	
+	TASK_LIST_PENDING,
+	
+	TASK_LIST_OVERDUE,
 	
 	/**
 	 * Task is being being displayed in a task list view. The list contains tasks

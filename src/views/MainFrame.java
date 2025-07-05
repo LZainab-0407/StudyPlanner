@@ -32,7 +32,9 @@ public class MainFrame extends JFrame {
 		
 		JPanel mainContent = new JPanel();
 		mainContent.setLayout(new BorderLayout(20, 20));
+		
 		CalendarView calendarView = new CalendarView(mainContent);
+		UserSession.setCurrentViewContext(ViewContext.CALENDAR); //***********************************
 		mainContent.add(calendarView, BorderLayout.CENTER);
 		
 		this.add(mainContent, BorderLayout.CENTER);

@@ -61,6 +61,30 @@ public class TaskManager {
 	}
 	
 	/**
+	 * Returns a list of all pending (not completed) tasks.
+	 */
+	public static ArrayList<Task> getPendingTasks(){
+		return taskList.stream().filter(task -> (!task.isCompleted() && !task.getStatus().equalsIgnoreCase("Overdue!")))
+				.collect(Collectors.toCollection(ArrayList:: new));
+	}
+	
+	/**
+	 * Returns a list of all completed tasks.
+	 */
+	public static ArrayList<Task> getCompletedTasks() {
+		return taskList.stream().filter(task -> task.isCompleted())
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	/**
+	 * Returns a list of all overdue tasks.
+	 */
+	public static ArrayList<Task> getOverdueTasks() {
+		return taskList.stream().filter(task -> task.getStatus().equalsIgnoreCase("Overdue!"))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	/**
      * Returns a list of all tasks that are due on the specified date.
      *
      * @param date the date to filter tasks by

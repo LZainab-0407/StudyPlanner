@@ -6,7 +6,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import models.UserSession;
 import views.CalendarView;
+import views.ViewContext;
 
 /**
  * Controller class that handles calendar-related UI updates in the application.
@@ -27,6 +29,7 @@ public class CalendarController {
      * @param mainContent the panel in which the calendar view should be displayed
      */
 	public static void displayCalendar(JPanel mainContent) {
+		UserSession.setCurrentViewContext(ViewContext.CALENDAR);
 		mainContent.removeAll();
 		CalendarView calendarView = new CalendarView(mainContent);
 		mainContent.add(calendarView, BorderLayout.CENTER);
