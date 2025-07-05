@@ -98,7 +98,7 @@ public class CalendarDayPanel extends JPanel {
 		
 		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, date);
+			TaskController.displayTaskList(mainContent, date, ViewContext.CALENDAR);
 		});
 		
 		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");

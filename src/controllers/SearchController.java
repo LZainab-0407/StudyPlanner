@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import data.TaskManager;
+import models.UserSession;
 import views.SearchView;
 import views.TaskListPanel;
 import views.ViewContext;
@@ -29,6 +30,7 @@ public class SearchController {
      * @param parent      the parent frame (typically {@code MainFrame}) to support modal dialogs
      */
 	public static void displaySearchView(JPanel mainContent, JFrame parent) {
+		UserSession.setCurrentViewContext(ViewContext.SEARCH);
 		mainContent.removeAll();
 		SearchView searchView = new SearchView(mainContent, parent);
 		mainContent.add(searchView, BorderLayout.CENTER);
@@ -45,6 +47,7 @@ public class SearchController {
      * @param searchResultsPanel the panel where the latest filtered task list should be displayed
      */
 	public static void refreshSearchResult(JPanel searchResultsPanel) {
+		UserSession.setCurrentViewContext(ViewContext.SEARCH);
 		searchResultsPanel.removeAll();
 		TaskListPanel taskListPanel = new TaskListPanel(searchResultsPanel, TaskManager.getLatestFilteredTasks(), ViewContext.SEARCH);
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);

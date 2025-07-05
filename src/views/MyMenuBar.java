@@ -24,7 +24,7 @@ public class MyMenuBar extends JMenuBar{
 		addTaskItem.addActionListener(e -> TaskController.addNewTask(parent, mainContent, ViewContext.CALENDAR));
 		JMenuItem viewTaskListItem = new JMenuItem("View Task List");
 		viewTaskListItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, null);
+			TaskController.displayTaskList(mainContent, null, ViewContext.TASK_LIST_PENDING);
 		});
 		JMenu tasksMenu = new JMenu("Task");
 		tasksMenu.add(addTaskItem);
@@ -37,7 +37,7 @@ public class MyMenuBar extends JMenuBar{
 		});
 		JMenuItem taskListItem = new JMenuItem("Task List");
 		taskListItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, null);
+			TaskController.displayTaskList(mainContent, null, ViewContext.TASK_LIST_PENDING);
 		});
 		JMenu viewMenu = new JMenu("View");
 		viewMenu.add(calendarItem);
