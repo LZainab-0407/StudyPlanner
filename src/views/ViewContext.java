@@ -23,6 +23,11 @@ public enum ViewContext {
 	 */
 	TASK_LIST_ON_DATE,
 	
+	/**
+	 * The statistics are being shown
+	 */
+	STATS,
+	
 	/** The task is being displayed from the calendar view (e.g. as a popup). */
 	CALENDAR,
 	

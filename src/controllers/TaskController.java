@@ -43,7 +43,7 @@ public class TaskController{
      * @param parentFrame  the parent frame to center the popup on
      * @param mainContent  the main content panel to refresh after task creation
      */
-	public static void addNewTask(JFrame parentFrame, JPanel mainContent, ViewContext view) {
+	public static void addNewTask(JFrame parentFrame, JPanel mainContent) {
 		
 		JFrame inputFrame = new JFrame("Add New Task");
 		inputFrame.setSize(500, 500);
@@ -92,7 +92,7 @@ public class TaskController{
 			JOptionPane.showMessageDialog(inputFrame, "New task added!");
 			inputFrame.dispose();
 			
-			refresh(mainContent, view, null);
+			refresh(mainContent, UserSession.getCurentViewContext(), null);
 		});
 		
 		// cancel button logic: close window
@@ -207,15 +207,15 @@ public class TaskController{
 	 */
 	public static void refresh(JPanel mainContent, ViewContext view, LocalDate date) {
 		switch (view) {
-			case ViewContext.TASK_LIST_ALL: refreshTaskList(mainContent, null, view); break;
-			case ViewContext.TASK_LIST_PENDING: refreshTaskList(mainContent, null, view); break;
-			case ViewContext.TASK_LIST_COMPLETED:refreshTaskList(mainContent, null, view); break;
-			case ViewContext.TASK_LIST_OVERDUE:refreshTaskList(mainContent, null, view); break;
+//			case ViewContext.TASK_LIST_ALL: refreshTaskList(mainContent, null, view); break;
+//			case ViewContext.TASK_LIST_PENDING: refreshTaskList(mainContent, null, view); break;
+//			case ViewContext.TASK_LIST_COMPLETED:refreshTaskList(mainContent, null, view); break;
+//			case ViewContext.TASK_LIST_OVERDUE:refreshTaskList(mainContent, null, view); break;
 			
 			case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date, view); break;
 			case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
 			case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
-			default:
+			default: refreshTaskList(mainContent, null, UserSession.getCurentViewContext());
 				break;
 		}
 	}

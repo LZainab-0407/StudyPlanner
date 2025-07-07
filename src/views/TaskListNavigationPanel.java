@@ -15,8 +15,6 @@ import models.UserSession;
  * Pending Tasks, Overdue Tasks, Completed Tasks, and All Tasks views.
  */
 public class TaskListNavigationPanel extends JPanel{
-	private JButton activeButton;
-	
 	/**
      * Creates a panel with buttons for task list filtering.
      *
@@ -62,7 +60,7 @@ public class TaskListNavigationPanel extends JPanel{
 		
 		// highlight the button selected
 		ViewContext view = UserSession.getCurentViewContext();
-		Color highlightColor = new Color(0xd6befa);
+		Color highlightColor = new Color(0xd6befa); //lavender
 		switch(view) {
 			case ViewContext.TASK_LIST_ALL: allTasksButton.setBackground(highlightColor);; break;
 			case ViewContext.TASK_LIST_PENDING: pendingTasksButton.setBackground(highlightColor); break;

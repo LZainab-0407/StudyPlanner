@@ -1,14 +1,15 @@
 package views;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
-import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controllers.StatsController;
 import data.TaskManager;
 import models.UserSession;
 
@@ -26,12 +27,11 @@ public class MainFrame extends JFrame {
 		this.setSize(1000, 600);
 		this.setLayout(new BorderLayout(20, 20));
 		
-		JPanel leftPanel = new JPanel();
-		leftPanel.setPreferredSize(new Dimension(150, 500));
-		this.add(leftPanel, BorderLayout.WEST);
-		
 		JPanel mainContent = new JPanel();
 		mainContent.setLayout(new BorderLayout(20, 20));
+		
+		JPanel leftPanel = generateLeftPanel(this, mainContent);
+		this.add(leftPanel, BorderLayout.WEST);
 		
 		CalendarView calendarView = new CalendarView(mainContent);
 		UserSession.setCurrentViewContext(ViewContext.CALENDAR); //***********************************
@@ -59,6 +59,7 @@ public class MainFrame extends JFrame {
     * @return a configured JPanel for the right side of the layout
     */
 	public static JPanel generateRightPanel(JFrame mainFrame, JPanel mainContent) {
+
 		JPanel rightPanel = new JPanel();
 		rightPanel.setPreferredSize(new Dimension(100, 500));
 		rightPanel.setLayout(new BorderLayout(10, 10));
@@ -82,5 +83,19 @@ public class MainFrame extends JFrame {
 		rightPanel.add(logOutButton, BorderLayout.SOUTH);
 		
 		return rightPanel;
+	}
+	
+	public static JPanel generateLeftPanel(JFrame mainFrame, JPanel mainContent) {
+		JPanel leftPanel = new JPanel();
+		leftPanel.setPreferredSize(new Dimension(100, 500));
+		leftPanel.setLayout(new GridLayout(6, 1, 0, 2));
+		
+		IconOnlyButton statsButton = new IconOnlyButton("Show statistics", new ImageIcon("Resources/icons/statistics-64.png"));
+		statsButton.addActionListener(e -> {
+			StatsController.displayStatsView(mainContent);
+		});
+		leftPanel.add(statsButton);
+		
+		return leftPanel;
 	}
 }

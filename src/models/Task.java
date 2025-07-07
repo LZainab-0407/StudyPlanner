@@ -13,6 +13,7 @@ public class Task implements Serializable{
 	private LocalDate deadline;
 	private PriorityLevel priorityLevel;
 	private boolean isCompleted;
+	private LocalDate completionDate;
 	
 	public Task(String title, String description, LocalDate deadline, PriorityLevel level) {
 		this.setCompleted(false);
@@ -100,5 +101,15 @@ public class Task implements Serializable{
 
 	public void setCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
+		if(isCompleted) {
+			this.completionDate = LocalDate.now(); // mark when completed
+		}
+		else {
+			this.completionDate = null;
+		}
+	}
+	
+	public LocalDate getCompletionDate() {
+		return completionDate;
 	}
 }

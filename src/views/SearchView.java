@@ -194,7 +194,7 @@ public class SearchView extends JPanel{
 		// add statusBox (drop-down)
 		JLabel statusLabel = new JLabel("Status: ");
 		filterPanel.add(statusLabel);
-		String[] statuses = {"Overdue", "Due today", "Due in 7 days", "Due in 14 days" , "Due in 30 days"};
+		String[] statuses = {"Overdue", "Due today", "Due this week" ,"Due in 7 days", "Due in 14 days" , "Due in 30 days"};
 		statusBox = new JComboBox<>(statuses);
 		statusBox.insertItemAt(null, 0);
 		statusBox.setSelectedIndex(0);

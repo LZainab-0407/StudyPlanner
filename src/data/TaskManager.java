@@ -6,8 +6,10 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import models.PriorityLevel;
@@ -103,6 +105,35 @@ public class TaskManager {
 	}
 	
 	/**
+	 * Returns the number of tasks completed today.
+	 */
+	public static long getNumTasksCompletedToday() {
+		LocalDate today = LocalDate.now();
+		
+		return taskList.stream()
+				.filter(task -> task.isCompleted())
+				.filter(task -> today.equals(task.getCompletionDate()))
+				.count();
+	}
+	
+	/**
+	 * Returns the number of tasks completed this week.
+	 */
+	public static long getNumTasksCompletedThisWeek() {
+		LocalDate today = LocalDate.now();
+		WeekFields weekFields = WeekFields.of(Locale.getDefault());
+		int currentWeek = today.get(weekFields.weekOfWeekBasedYear());
+		int currentYear = today.getYear();
+		
+		return taskList.stream()
+				.filter(task -> task.isCompleted())
+				.filter(task -> {
+					LocalDate completionDate = task.getCompletionDate();
+					return  completionDate.get(weekFields.weekOfWeekBasedYear()) == currentWeek && completionDate.getYear() == currentYear;
+				}).count();
+	}
+	
+	/**
      * Sets the {@code latestFilteredTasks} list based on a combination of keyword, priority level,
      * and status index (representing overdue, due today, or due in X days).
      *
@@ -132,9 +163,10 @@ public class TaskManager {
 				matches = false;
 			}
 			
-			ArrayList<Task> dueIn7Days = statusIndex == 3 ? getTaskDueInNext(7, taskList) : null;
-			ArrayList<Task> dueIn14Days = statusIndex == 4 ? getTaskDueInNext(14, taskList) : null;
-			ArrayList<Task> dueIn30Days = statusIndex == 5 ? getTaskDueInNext(30, taskList) : null;
+			ArrayList<Task> dueThisWeek = statusIndex == 3? getTasksDueThisWeek() : null;
+			ArrayList<Task> dueIn7Days = statusIndex == 4 ? getTaskDueInNext(7, taskList) : null;
+			ArrayList<Task> dueIn14Days = statusIndex == 5 ? getTaskDueInNext(14, taskList) : null;
+			ArrayList<Task> dueIn30Days = statusIndex == 6 ? getTaskDueInNext(30, taskList) : null;
 			
 			switch(statusIndex) {
 			
@@ -149,20 +181,26 @@ public class TaskManager {
 						matches = false;
 					}
 					break; 
+					
+			case 3: // due this week
+				if(dueThisWeek == null || !dueThisWeek.contains(task)) {
+					matches = false;
+				}
+				break;
 			
-			case 3: // due in 7 days
+			case 4: // due in 7 days
 					if (dueIn7Days == null || !dueIn7Days.contains(task)) {
 						matches = false;
 					}
 					break;
 			
-			case 4: // due in 14 days 
+			case 5: // due in 14 days 
 					if (dueIn14Days == null || !dueIn14Days.contains(task)) {
 						matches = false;
 					}
 					break;
 			
-			case 5: // due in 30 days
+			case 6: // due in 30 days
 					if (dueIn30Days == null || !dueIn30Days.contains(task)) {
 						matches = false;
 					}
@@ -204,6 +242,23 @@ public class TaskManager {
 				.collect(Collectors.toList());
 		
 		return new ArrayList<>(retList);
+	}
+	
+	/**
+	 * Returns a list of all tasks that are due in the current week.
+	 */
+	public static ArrayList<Task> getTasksDueThisWeek(){
+		LocalDate today = LocalDate.now();
+		WeekFields weekFields = WeekFields.of(Locale.getDefault());
+		int currentWeek = today.get(weekFields.weekOfWeekBasedYear());
+		int currentYear = today.getYear();
+		
+		ArrayList<Task> retList = taskList.stream().filter(task -> {
+			LocalDate deadline = task.getDeadline();
+			return deadline.get(weekFields.weekOfWeekBasedYear()) == currentWeek && deadline.getYear() == currentYear;
+			}).collect(Collectors.toCollection(ArrayList::new));
+				
+		return retList;
 	}
 	
 	/**
