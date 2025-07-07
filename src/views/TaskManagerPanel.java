@@ -25,9 +25,10 @@ public class TaskManagerPanel extends JPanel{
 		this.setLayout(new GridLayout(6, 1, 0, 2));
 		
 		JButton addNewTaskButton = new IconOnlyButton("Add to task list", new ImageIcon("Resources/icons/add_task.png"));
-		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parent, mainContent, ViewContext.TASK_LIST_ALL));
+		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parent, mainContent));
 		
-		JButton sortTasksButton = new IconOnlyButton("Sort task list", new ImageIcon("Resources/icons/sort.png"));
+		JButton sortTasksButton = new IconOnlyButton("Sort task list " + "(Go to task list to see sorted tasks)", 
+													new ImageIcon("Resources/icons/sort-64.png"));
 		sortTasksButton.addActionListener(e -> {
 			JPopupMenu options = generatePopupMenu(mainContent);
 			options.show(sortTasksButton, 0, sortTasksButton.getHeight());
@@ -63,14 +64,14 @@ public class TaskManagerPanel extends JPanel{
 		byPriorityItem.addActionListener(e -> {
 			TaskManager.prioritizeTaskList();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent, ViewContext.TASK_LIST_ALL, null);
+			TaskController.refresh(mainContent, UserSession.getCurentViewContext(), null);
 		});
 		
 		JMenuItem byDeadlineItem = new JMenuItem("By Deadline");
 		byDeadlineItem.addActionListener(e -> {
 			TaskManager.sortTasksByDeadline();
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-			TaskController.refresh(mainContent, ViewContext.TASK_LIST_ALL, null);
+			TaskController.refresh(mainContent, UserSession.getCurentViewContext(), null);
 		});
 		
 		sortOptions.add(byPriorityItem);
