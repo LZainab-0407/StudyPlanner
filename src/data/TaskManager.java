@@ -1,5 +1,6 @@
 package data;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -401,6 +402,33 @@ public class TaskManager {
 		}catch (Exception e){
 			taskList = new ArrayList<>();
 		}
+	}
+	
+	/**
+	 * Returns a color based on the priority level of the task.
+	 * </ul>
+	 * 	<li> HIGH -> red <li>
+	 * 	<li> MEDIUM -> orange <li>
+	 * 	<li> LOW -> yellow <li>
+	 * </ul>
+	 * 
+	 * If the task is completed, green color is returned no matter
+	 * the priority level
+	 *
+	 * @param task the task whose priority will determine the color
+	 * @return the color associated with the task's priority level (or green if completed)
+	 */
+	public static Color getColorForTask(Task task) {
+		if(task.isCompleted()) {
+			return new Color(0x7bb66f); // green
+		}
+		PriorityLevel priority = task.getPriorityLevel();
+		switch (priority) {
+		case PriorityLevel.HIGH: return new Color(0xff4d4d); // red
+		case PriorityLevel.MEDIUM: return new Color(0xff9100); // orange
+		case PriorityLevel.LOW: return new Color(0xffdd00); // yellow
+		}
+		return Color.LIGHT_GRAY;
 	}
 	
 	/**

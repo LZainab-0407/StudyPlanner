@@ -42,7 +42,7 @@ public class Dot extends JPanel {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new DotTaskPopUpFrame(task, mainContent);
+				new TaskPopUpFrame(task, mainContent, ViewContext.CALENDAR_WEEK);
 			}
 		});
 	}

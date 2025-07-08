@@ -14,17 +14,17 @@ import models.Task;
  *
  * This popup is used in calendar views to preview and manage individual tasks.
  */
-public class DotTaskPopUpFrame extends JFrame{
+public class TaskPopUpFrame extends JFrame{
 	/**
 	 * The task represented by this dot
 	 */
 	private Task task;
 	
-	public DotTaskPopUpFrame(Task task, JPanel mainContent) {
+	public TaskPopUpFrame(Task task, JPanel mainContent, ViewContext view) {
 		this.task = task;
 		this.setTitle(task.getTitle());
 		this.setLocationRelativeTo(null);
-		TaskPanel taskPanel = new TaskPanel(task, mainContent, ViewContext.CALENDAR);
+		TaskPanel taskPanel = new TaskPanel(task, mainContent, view);
 		this.add(taskPanel);
 		this.pack();
 		this.setVisible(true);

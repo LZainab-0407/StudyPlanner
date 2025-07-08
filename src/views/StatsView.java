@@ -143,7 +143,7 @@ public class StatsView extends JPanel{
 		buttonPanel.setPreferredSize(new Dimension(70, 80));
 		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-64.png"));
 		backButton.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent);
+			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
 		});
 		buttonPanel.add(backButton);
 		

@@ -102,7 +102,7 @@ public class SearchView extends JPanel{
 		
 		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-48.png"));
 		backButton.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent);
+			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
 		});
 		
 		// placeholder keyword field

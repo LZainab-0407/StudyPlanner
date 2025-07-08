@@ -29,7 +29,9 @@ public enum ViewContext {
 	STATS,
 	
 	/** The task is being displayed from the calendar view (e.g. as a popup). */
-	CALENDAR,
+	CALENDAR_MONTH,
+	
+	CALENDAR_WEEK,
 	
 	/**
 	 * The tasks are being displayed as the result of a search.
