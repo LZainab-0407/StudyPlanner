@@ -8,8 +8,10 @@ import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import models.PriorityLevel;
@@ -87,7 +89,35 @@ public class TaskManager {
 	}
 	
 	/**
-     * Returns a list of all tasks that are due on the specified date.
+	 * Returns a map of dates to the number of overdue tasks that were due on each of the past {@code days}.
+	 * Only includes tasks whose deadline was on that day and are still not completed.
+	 * 
+	 * @param days the number of past days to consider (e.g., 7 or 30)
+	 * @return a map of LocalDate to count of overdue tasks on that date
+	 */
+	public static Map<LocalDate, Integer> getOverdueHistory(int days){
+		Map<LocalDate, Integer> overdueHistory = new LinkedHashMap<>();
+		LocalDate today = LocalDate.now();
+		
+		// map is initialized to all dates in the range and all overdue history count to 0
+		for(int i = days; i >= 1; i--) {
+			LocalDate date = today.minusDays(i);
+			overdueHistory.put(date, 0);
+		}
+		
+		for(Task t: taskList) {
+			if(!t.isCompleted()) {
+				LocalDate deadline = t.getDeadline();
+				if (overdueHistory.containsKey(deadline) && deadline.isBefore(today)) {
+					overdueHistory.put(deadline, overdueHistory.get(deadline) + 1);
+				}
+			}
+		}
+		return overdueHistory;
+	}
+	
+	/**
+     * Returns a list of all (incomplete) tasks that are due on the specified date.
      *
      * @param date the date to filter tasks by
      * @return a list of tasks with deadlines matching the given date
@@ -96,7 +126,7 @@ public class TaskManager {
 		ArrayList<Task> tasks = new ArrayList<>();
 		
 		for(Task t: taskList) {
-			if (t.getDeadline().equals(date)){
+			if (!t.isCompleted() && t.getDeadline().equals(date) ){
 				tasks.add(t);
 			}
 		}
@@ -134,6 +164,17 @@ public class TaskManager {
 	}
 	
 	/**
+	 * Returns the task completion rate (completed / total) as a percentage.
+	 */
+	public static double getCompletionRate() {
+		double total = taskList.size();
+		if (total == 0) {
+			return 0;
+		}
+		return (getCompletedTasks().size() * 100) / total;
+	}
+	
+	/**
      * Sets the {@code latestFilteredTasks} list based on a combination of keyword, priority level,
      * and status index (representing overdue, due today, or due in X days).
      *
@@ -163,44 +204,67 @@ public class TaskManager {
 				matches = false;
 			}
 			
-			ArrayList<Task> dueThisWeek = statusIndex == 3? getTasksDueThisWeek() : null;
-			ArrayList<Task> dueIn7Days = statusIndex == 4 ? getTaskDueInNext(7, taskList) : null;
-			ArrayList<Task> dueIn14Days = statusIndex == 5 ? getTaskDueInNext(14, taskList) : null;
-			ArrayList<Task> dueIn30Days = statusIndex == 6 ? getTaskDueInNext(30, taskList) : null;
+			ArrayList<Task> completed = statusIndex == 1 ? getCompletedTasks() : null;
+			ArrayList<Task> overdue = statusIndex == 2 ? getOverdueTasks() : null;
+			ArrayList<Task> dueToday = statusIndex == 3 ? getTasksOnDate(LocalDate.now()) : null;
+			ArrayList<Task> dueTomorrow = statusIndex == 4 ? getTasksOnDate(LocalDate.now().plusDays(1)): null;
+			ArrayList<Task> dueIn3Days = statusIndex == 5 ? getTaskDueInNext(3, taskList) : null;
+			ArrayList<Task> dueThisWeek = statusIndex == 6? getTasksDueThisWeek() : null;
+			ArrayList<Task> dueNextWeek = statusIndex == 7? getTasksDueNextWeek(): null;
+			ArrayList<Task> dueIn14Days = statusIndex == 8 ? getTaskDueInNext(14, taskList) : null;
+			ArrayList<Task> dueIn30Days = statusIndex == 9 ? getTaskDueInNext(30, taskList) : null;
 			
 			switch(statusIndex) {
 			
-			case 1: // Overdue
-				if(!task.getStatus().equals("Overdue!")) {
-					matches = false;
-				}
-						break; 
-						
-			case 2: // due today 
-					if(!task.getStatus().equals("Due today")) {
+			case 1: // completed
+					if (completed == null || !completed.contains(task)) {
+						matches = false;
+					}
+					break;
+			
+			case 2: // Overdue
+					if(overdue == null || !overdue.contains(task)) {
 						matches = false;
 					}
 					break; 
+						
+			case 3: // due today 
+					if(dueToday == null || !dueToday.contains(task)) {
+						matches = false;
+					}
+					break; 
+			
+			case 4: // due tomorrow
+					if(dueTomorrow == null || !dueTomorrow.contains(task)) {
+						matches = false;
+					}
+					break;
+			
+			case 5: // due in 3 days
+					if(dueIn3Days == null || !dueIn3Days.contains(task)) {
+						matches = false;
+					}
+					break;
 					
-			case 3: // due this week
+			case 6: // due this week
 				if(dueThisWeek == null || !dueThisWeek.contains(task)) {
 					matches = false;
 				}
 				break;
 			
-			case 4: // due in 7 days
-					if (dueIn7Days == null || !dueIn7Days.contains(task)) {
+			case 7: // due next week
+					if (dueNextWeek == null || !dueNextWeek.contains(task)) {
 						matches = false;
 					}
 					break;
 			
-			case 5: // due in 14 days 
+			case 8: // due in 14 days 
 					if (dueIn14Days == null || !dueIn14Days.contains(task)) {
 						matches = false;
 					}
 					break;
 			
-			case 6: // due in 30 days
+			case 9: // due in 30 days
 					if (dueIn30Days == null || !dueIn30Days.contains(task)) {
 						matches = false;
 					}
@@ -223,7 +287,7 @@ public class TaskManager {
 	 * <p>
 	 * This method filters tasks based on their deadline. Only tasks with a non-null deadline
 	 * that falls between today and {@code today + days} (inclusive) are included. Completed
-	 * tasks within the deadline window are also included
+	 * tasks within the deadline window are not included
 	 * <p>
 	 * The result is returned as an {@code ArrayList<Task>} 
 	 *
@@ -235,6 +299,7 @@ public class TaskManager {
 		LocalDate today = LocalDate.now();
 		LocalDate endDate = today.plusDays(days);
 		List<Task> retList = tasks.stream()
+				.filter(task -> !task.isCompleted())
 				.filter(task -> {
 					LocalDate deadline = task.getDeadline();
 					return (deadline != null && !deadline.isBefore(today) && !deadline.isAfter(endDate));
@@ -245,19 +310,44 @@ public class TaskManager {
 	}
 	
 	/**
-	 * Returns a list of all tasks that are due in the current week.
+	 * Returns a list of all incomplete tasks that are due within the current week.
+	 * The week starts on Monday and ends on Sunday, following the default locale.
+	 *
+	 * @return an {@code ArrayList} of tasks due this week and not completed
 	 */
 	public static ArrayList<Task> getTasksDueThisWeek(){
 		LocalDate today = LocalDate.now();
-		WeekFields weekFields = WeekFields.of(Locale.getDefault());
-		int currentWeek = today.get(weekFields.weekOfWeekBasedYear());
-		int currentYear = today.getYear();
+		LocalDate startOfThisWeek = today.with(java.time.DayOfWeek.MONDAY);
+		LocalDate endOfThisWeek = startOfThisWeek.plusDays(6);
 		
-		ArrayList<Task> retList = taskList.stream().filter(task -> {
-			LocalDate deadline = task.getDeadline();
-			return deadline.get(weekFields.weekOfWeekBasedYear()) == currentWeek && deadline.getYear() == currentYear;
+		ArrayList<Task> retList = taskList.stream()
+				.filter(task -> !task.isCompleted())
+				.filter(task -> {
+					LocalDate deadline = task.getDeadline();
+					return !deadline.isBefore(startOfThisWeek) && !deadline.isAfter(endOfThisWeek);
 			}).collect(Collectors.toCollection(ArrayList::new));
 				
+		return retList;
+	}
+	
+	/**
+	 * Returns a list of all incomplete tasks that are due within the next week.
+	 * The next week is the full week immediately after the current one, from next Monday to next Sunday.
+	 *
+	 * @return an {@code ArrayList} of tasks due next week and not completed
+	 */
+	public static ArrayList<Task> getTasksDueNextWeek() {
+		LocalDate today = LocalDate.now();
+		LocalDate startOfNextWeek = today.with(java.time.DayOfWeek.SUNDAY).plusDays(1);
+		LocalDate endOfNextWeek = startOfNextWeek.plusDays(6);
+		
+		ArrayList<Task> retList = taskList.stream()
+				.filter(task -> !task.isCompleted())
+				.filter(task -> {
+					LocalDate deadline = task.getDeadline();
+					return !deadline.isBefore(startOfNextWeek) && !deadline.isAfter(endOfNextWeek);
+				}).collect(Collectors.toCollection(ArrayList::new));
+		
 		return retList;
 	}
 	

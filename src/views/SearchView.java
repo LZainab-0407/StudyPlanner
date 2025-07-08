@@ -98,9 +98,9 @@ public class SearchView extends JPanel{
 		JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5 ));
 		
 		searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5 ));
-		searchPanel.setPreferredSize(new Dimension(800, 50));
+		searchPanel.setPreferredSize(new Dimension(800, 70));
 		
-		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back.png"));
+		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-48.png"));
 		backButton.addActionListener(e -> {
 			CalendarController.displayCalendar(mainContent);
 		});
@@ -194,7 +194,8 @@ public class SearchView extends JPanel{
 		// add statusBox (drop-down)
 		JLabel statusLabel = new JLabel("Status: ");
 		filterPanel.add(statusLabel);
-		String[] statuses = {"Overdue", "Due today", "Due this week" ,"Due in 7 days", "Due in 14 days" , "Due in 30 days"};
+		String[] statuses = {"Completed", "Overdue", "Due today", "Due tomorrow","Due in 3 days", "Due this week", 
+				"Due next week", "Due in 14 days" , "Due in 30 days"};
 		statusBox = new JComboBox<>(statuses);
 		statusBox.insertItemAt(null, 0);
 		statusBox.setSelectedIndex(0);

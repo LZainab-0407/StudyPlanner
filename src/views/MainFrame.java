@@ -24,17 +24,17 @@ public class MainFrame extends JFrame {
 	
 	public MainFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(1000, 600);
-		this.setLayout(new BorderLayout(20, 20));
+		this.setSize(1100, 650);
+		this.setLayout(new BorderLayout());
 		
 		JPanel mainContent = new JPanel();
-		mainContent.setLayout(new BorderLayout(20, 20));
+		mainContent.setLayout(new BorderLayout());
 		
 		JPanel leftPanel = generateLeftPanel(this, mainContent);
 		this.add(leftPanel, BorderLayout.WEST);
 		
 		CalendarView calendarView = new CalendarView(mainContent);
-		UserSession.setCurrentViewContext(ViewContext.CALENDAR); //***********************************
+		UserSession.setCurrentViewContext(ViewContext.CALENDAR); 
 		mainContent.add(calendarView, BorderLayout.CENTER);
 		
 		this.add(mainContent, BorderLayout.CENTER);
