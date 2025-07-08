@@ -16,26 +16,27 @@ import views.ViewContext;
  * This class follows the MVC design pattern and is responsible for 
  * managing the logic of displaying and refreshing the {@code CalendarView}
  * inside the main content panel.
+ * 
+ * @author Labibah Zainab
  */
 public class CalendarController {
 	
 	/**
-     * Displays the calendar dashboard in the provided main content panel.
-     * <p>
-     * This method clears the existing content in the panel, 
-     * creates a new {@code CalendarView} instance, and places it 
-     * in the center of the layout.
-     *
-     * @param mainContent the panel in which the calendar view should be displayed
-     */
-	public static void displayCalendar(JPanel mainContent) {
-		UserSession.setCurrentViewContext(ViewContext.CALENDAR);
+	 * Displays the calendar dashboard with either month or week view,
+	 * depending on the given {@code ViewContext}.
+	 *
+	 * @param mainContent the main UI panel to show the calendar in
+	 * @param view the calendar view mode (month or week)
+	 */
+	public static void displayCalendar(JPanel mainContent, ViewContext view) {
+		UserSession.setCurrentViewContext(view);
 		mainContent.removeAll();
-		CalendarView calendarView = new CalendarView(mainContent);
+		CalendarView calendarView = new CalendarView(mainContent, view);
 		mainContent.add(calendarView, BorderLayout.CENTER);
 		mainContent.revalidate();
 	    mainContent.repaint();
 	}
+	
 	
 	 /**
      * Refreshes the calendar view by re-displaying it in the main content panel.
@@ -44,12 +45,9 @@ public class CalendarController {
      * such as editing, adding, or deleting a task.
      *
      * @param mainContent the panel containing the calendar view to be refreshed
+     * @param view the calendar view mode (month or week)
      */
-	public static void refreshCalendar(JPanel mainContent) {
-		displayCalendar(mainContent);
-	}
-	
-	public static void refreshDotPopUp() {
-		
+	public static void refreshCalendar(JPanel mainContent, ViewContext view) {
+		displayCalendar(mainContent, view);
 	}
 }

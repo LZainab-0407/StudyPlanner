@@ -47,7 +47,7 @@ public class TaskListNavigationPanel extends JPanel{
 		// button for overdue tasks
 		JButton overdueTasksButton = new JButton("❗ Overdue Tasks");
 		if(!TaskManager.getOverdueTasks().isEmpty()) {
-			overdueTasksButton.setBackground(new Color(0xff99b0));
+			overdueTasksButton.setBackground(new Color(0xff99b0)); // red
 			overdueTasksButton.setToolTipText("You have overdue tasks!");
 		}
 		else {

@@ -2,7 +2,6 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -17,45 +16,62 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import controllers.TaskController;
 import data.TaskManager;
-import models.PriorityLevel;
 import models.Task;
 import models.UserSession;
 
 /**
- * A single day panel used in the calendar view.
- * <p>
- * Displays the day number and an optional options menu, and is designed to show
- * tasks or indicators related to that date in future enhancements.
- * This panel is styled with custom colors and border, and can be extended
- * with dots, hover effects, or event handling.
+ * A panel representing a single day in the calendar grid.
+ * Displays task indicators or an optional scrollable task list depending on the view context.
+ * 
+ * @author Labibah Zainab
  */
 public class CalendarDayPanel extends JPanel {
 	private final YearMonth currentMonth;
 	private final int dayOfMonth;
 	private JPanel mainContent;
+	private boolean isMonth;
 	
-	/**
-     * Constructs a calendar panel for a specific day number (1–31).
+	 /**
+     * Constructs a day panel for a specific day in a calendar.
      *
-     * @param day the numeric day of the month (e.g. 1, 15, 30)
+     * @param dayOfMonth the day number
+     * @param currentMonth the month-year of the calendar
+     * @param mainContent the main panel to update when actions are triggered
+     * @param isMonth whether the panel is in month or week view, true if month view, false if week view
      */
-	public CalendarDayPanel(int day, YearMonth currentMonth, JPanel mainContent){
+	public CalendarDayPanel(int day, YearMonth currentMonth, JPanel mainContent, boolean isMonth){
 		this.dayOfMonth = day;
 		this.currentMonth = currentMonth;
 		this.mainContent = mainContent;
-		this.setLayout(new BorderLayout(5, 5));
-		this.setBorder(BorderFactory.createLineBorder(new Color(0x75bfec)));
-		this.setBackground(new Color(0xdff2ff));
+		this.setLayout(new BorderLayout());
 		
+		this.setBackground(new Color(0xdff2ff)); // blue
+	
 		JPanel topPanel = generateTopPanel(day);
 		this.add(topPanel, BorderLayout.NORTH);
 		
-		JPanel dotsPanel = generateDotsPanel(day);
-		this.add(dotsPanel, BorderLayout.CENTER);
+		if (isMonth) {
+			JPanel dotsPanel = generateDotsPanel(day);
+			this.add(dotsPanel, BorderLayout.CENTER);
+			// highlight today
+			if(LocalDate.now().equals(LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth))) {
+				this.setBackground(new Color(0xd6befa)); // lavender
+			}
+		}
+		else {
+			JPanel taskTitleListPanel = generateTaskTitleListPanel(mainContent);
+			JScrollPane scrollPane = new JScrollPane(taskTitleListPanel);
+			// highlight today
+			if(LocalDate.now().equals(LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth))) {
+				topPanel.setBackground(new Color(0xd6befa)); // lavender
+			}
+			this.add(scrollPane, BorderLayout.CENTER);
+		}
 	}
 	
 	/**
@@ -68,6 +84,7 @@ public class CalendarDayPanel extends JPanel {
 	private JPanel generateTopPanel(int day) {
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 4, 2));
 		topPanel.setBorder(BorderFactory.createLineBorder(new Color(0x75bfec)));
+		
 		JLabel dayLabel = new JLabel("  " + String.valueOf(day) );
 		dayLabel.setVerticalAlignment(SwingConstants.TOP);
 		dayLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -98,7 +115,7 @@ public class CalendarDayPanel extends JPanel {
 		
 		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, date, ViewContext.CALENDAR);
+			TaskController.displayTaskList(mainContent, date, ViewContext.CALENDAR_MONTH);
 		});
 		
 		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
@@ -109,7 +126,7 @@ public class CalendarDayPanel extends JPanel {
 					TaskManager.getLatestFilteredTasks().remove(t);
 				}
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
+				TaskController.refresh(mainContent, ViewContext.CALENDAR_MONTH, null);
 			}
 		});
 		
@@ -118,7 +135,7 @@ public class CalendarDayPanel extends JPanel {
 			for (Task t: TaskManager.getTasksOnDate(date)) {
 				t.setCompleted(true);
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-				TaskController.refresh(mainContent, ViewContext.CALENDAR, null);
+				TaskController.refresh(mainContent, ViewContext.CALENDAR_MONTH, null);
 			}
 		});
 		
@@ -130,7 +147,7 @@ public class CalendarDayPanel extends JPanel {
 	}
 	
 	/**
-	 * Generates a small panel containing circular colored dots,
+	 * Generates a small panel containing circular colored clickable dots,
 	 * each representing a task due on a specific day.
 	 * The color of the dot indicates the task's priority level.
 	 *
@@ -138,21 +155,22 @@ public class CalendarDayPanel extends JPanel {
 	 * @return a transparent JPanel with 0 or more small round dots
 	 */
 	private JPanel generateDotsPanel(int day) {
-		JPanel dotsPanel = new JPanel(new GridLayout(0, 5, 5, 5));
+		JPanel dotsPanel = new JPanel(new GridLayout(0, 5, 5, 0));
 		//JPanel dotsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
-		dotsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 5));
+		//dotsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 5));
+		dotsPanel.setBorder(BorderFactory.createLineBorder(new Color(0x75bfec)));
 		dotsPanel.setOpaque(false);
 		
-		// add pending tasks
+		// show pending tasks
 		for(Task t: TaskManager.getTasksOnDate(currentMonth.atDay(dayOfMonth))) {
-			JPanel dot = new Dot(t, getColorForDot(t), mainContent);
+			JPanel dot = new Dot(t, TaskManager.getColorForTask(t), mainContent);
 			dotsPanel.add(dot);
 		}
 		
 		// show completed tasks as well
 		for(Task t: TaskManager.getCompletedTasks()) {
 			if(t.getDeadline().equals(currentMonth.atDay(dayOfMonth))) {
-				JPanel dot = new Dot(t, getColorForDot(t), mainContent);
+				JPanel dot = new Dot(t, TaskManager.getColorForTask(t), mainContent);
 				dotsPanel.add(dot);
 			}
 		}
@@ -160,24 +178,32 @@ public class CalendarDayPanel extends JPanel {
 		return dotsPanel;
 	}
 	
-	/**
-	 * Returns a color based on the priority level of the task.
-	 *
-	 * @param task the task whose priority will determine the color
-	 * @return the color associated with the task's priority level
-	 */
-	private Color getColorForDot(Task task) {
+	 /**
+     * Builds a panel containing colored clickable task information panels for the week view.
+     * The color of the panel indicates the task's priority level
+     * 
+     * @param mainContent the main panel to update when actions are triggered
+     */
+	private JPanel generateTaskTitleListPanel(JPanel mainContent) {
+		ArrayList<Task> tasks = TaskManager.getTasksOnDate(currentMonth.atDay(dayOfMonth));
+		JPanel TaskTitleListPanel = new JPanel((new GridLayout(tasks.size() + 2, 1, 5, 5)));
 		
-		if(task.isCompleted()) {
-			return new Color(0x7bb66f);
+		// show pendings tasks
+		for(Task task : tasks) {
+			JPanel taskTitlePanel = new TaskTitlePanel(task, TaskManager.getColorForTask(task), mainContent);
+			TaskTitleListPanel.add(taskTitlePanel);
 		}
-		PriorityLevel priority = task.getPriorityLevel();
-		switch (priority) {
-		case PriorityLevel.HIGH: return new Color(0xe12901);
-		case PriorityLevel.MEDIUM: return new Color(0xff9100);
-		case PriorityLevel.LOW: return new Color(0xffdd00);
+		
+		// show completed tasks as well
+		for(Task task: TaskManager.getCompletedTasks()) {
+			if(task.getDeadline().equals(currentMonth.atDay(dayOfMonth))) {
+				JPanel taskTitlePanel = new TaskTitlePanel(task, TaskManager.getColorForTask(task), mainContent);
+				TaskTitleListPanel.add(taskTitlePanel);
+			}
 		}
-		return Color.LIGHT_GRAY;
+		
+		return TaskTitleListPanel;
 	}
+	
 	
 }

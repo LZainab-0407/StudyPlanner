@@ -173,7 +173,7 @@ public class TaskController{
 		
 		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-64.png"));
 		backButton.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent);
+			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
 		});
 		buttonPanel.add(backButton);
 		
@@ -215,7 +215,8 @@ public class TaskController{
 //			case ViewContext.TASK_LIST_OVERDUE:refreshTaskList(mainContent, null, view); break;
 			
 			case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date, view); break;
-			case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
+			case ViewContext.CALENDAR_MONTH: CalendarController.refreshCalendar(mainContent, view); break;
+			case ViewContext.CALENDAR_WEEK: CalendarController.refreshCalendar(mainContent, view); break;
 			case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
 			case ViewContext.STATS: // do nothing 
 				break;
