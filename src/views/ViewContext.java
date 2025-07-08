@@ -9,13 +9,24 @@ package views;
  */
 public enum ViewContext {
 	/** The task is being displayed in the main task list view. */
-	TASK_LIST,
+	TASK_LIST_ALL,
+	
+	TASK_LIST_COMPLETED,
+	
+	TASK_LIST_PENDING,
+	
+	TASK_LIST_OVERDUE,
 	
 	/**
 	 * Task is being being displayed in a task list view. The list contains tasks
 	 * that are due on a specific date.
 	 */
 	TASK_LIST_ON_DATE,
+	
+	/**
+	 * The statistics are being shown
+	 */
+	STATS,
 	
 	/** The task is being displayed from the calendar view (e.g. as a popup). */
 	CALENDAR,

@@ -1,6 +1,8 @@
 package controllers;
 
+import data.TaskManager;
 import models.User;
+import models.UserSession;
 import views.LogInFrame;
 import views.MainFrame;
 import views.SignUpFrame;

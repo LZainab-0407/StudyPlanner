@@ -47,7 +47,7 @@ public class CalendarView extends JPanel{
 										SwingConstants.CENTER);
 		monthLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
 		
-		JButton prevMonthButton = new IconOnlyButton("Previous month", new ImageIcon("Resources/icons/left_arrow.png"));;
+		JButton prevMonthButton = new IconOnlyButton("Previous month", new ImageIcon("Resources/icons/left-64.png"));;
 		prevMonthButton.addActionListener(e -> {
 			currentMonth = currentMonth.minusMonths(1);
 			monthLabel.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + 
@@ -55,7 +55,7 @@ public class CalendarView extends JPanel{
 			updateCalendar();
 		});
 		
-		JButton nextMonthButton = new IconOnlyButton("Next month", new ImageIcon("Resources/icons/right_arrow.png"));
+		JButton nextMonthButton = new IconOnlyButton("Next month", new ImageIcon("Resources/icons/right-64.png"));
 		nextMonthButton.addActionListener(e -> {
 			currentMonth = currentMonth.plusMonths(1);
 			monthLabel.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + 

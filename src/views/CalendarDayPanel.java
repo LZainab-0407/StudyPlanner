@@ -98,7 +98,7 @@ public class CalendarDayPanel extends JPanel {
 		
 		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, date);
+			TaskController.displayTaskList(mainContent, date, ViewContext.CALENDAR);
 		});
 		
 		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
@@ -143,11 +143,18 @@ public class CalendarDayPanel extends JPanel {
 		dotsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 5));
 		dotsPanel.setOpaque(false);
 		
-		ArrayList<Task> tasks = TaskManager.getTasksOnDate(currentMonth.atDay(dayOfMonth));
-		
-		for(Task t: tasks) {
+		// add pending tasks
+		for(Task t: TaskManager.getTasksOnDate(currentMonth.atDay(dayOfMonth))) {
 			JPanel dot = new Dot(t, getColorForDot(t), mainContent);
 			dotsPanel.add(dot);
+		}
+		
+		// show completed tasks as well
+		for(Task t: TaskManager.getCompletedTasks()) {
+			if(t.getDeadline().equals(currentMonth.atDay(dayOfMonth))) {
+				JPanel dot = new Dot(t, getColorForDot(t), mainContent);
+				dotsPanel.add(dot);
+			}
 		}
 		
 		return dotsPanel;
