@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -125,7 +126,8 @@ public class TaskController{
 		}
 		else {
 			JPanel topPanel = new JPanel(new BorderLayout(10, 10));
-			topPanel.setPreferredSize(new Dimension(500, 70));
+			topPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+			topPanel.setPreferredSize(new Dimension(500, 80));
 			
 			TaskListNavigationPanel taskListNavigationPanel = new TaskListNavigationPanel(mainContent);
 			
@@ -167,9 +169,9 @@ public class TaskController{
 		mainContent.add(taskListPane, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-		buttonPanel.setPreferredSize(new Dimension(500, 50));
+		buttonPanel.setPreferredSize(new Dimension(500, 80));
 		
-		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back.png"));
+		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-64.png"));
 		backButton.addActionListener(e -> {
 			CalendarController.displayCalendar(mainContent);
 		});
@@ -215,6 +217,9 @@ public class TaskController{
 			case ViewContext.TASK_LIST_ON_DATE: refreshTaskList(mainContent, date, view); break;
 			case ViewContext.CALENDAR: CalendarController.refreshCalendar(mainContent); break;
 			case ViewContext.SEARCH:  SearchController.refreshSearchResult(mainContent); break;
+			case ViewContext.STATS: // do nothing 
+				break;
+			// if it is one of the task list views, we refresh the task list depending on the current view
 			default: refreshTaskList(mainContent, null, UserSession.getCurentViewContext());
 				break;
 		}
