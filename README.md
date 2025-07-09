@@ -6,48 +6,72 @@ A personal task manager built in **Java Swing**, following the **MVC design patt
 
 ## 🌟 Features
 
-- 🔐 **User Authentication**
+### 🔐 **User Authentication**
   - Sign up and log in with unique user credentials
-  - Each user's task list is securely saved to disk
+  - Each user has their own saved task list (stored locally)
 
-- 📝 **Add & Edit Tasks**
+### 📝 **Add & Edit Tasks**
   - Add tasks with a title, description, priority level, and deadline
   - Edit any field of an existing task
   - Deadline input uses a calendar date picker (`JDateChooser`)
 
-- ✅ **Complete Tasks**
+### ✅ **Complete Tasks**
   - Check off tasks to mark them as complete
   - Completed tasks are highlighted in green
 
-- 🗑️ **Delete Tasks**
+### 🗑️ **Delete Tasks**
   - Remove tasks permanently from your list
- 
-- 📅 **Calendar Dashboard** 
-  - Visual calendar interface as the default home view after login
-  - Each day has highlighted dots, each representing a task
-  - The highlight color depends on priority
-  - Click on the dot to see or edit the task
-  - Click the side menu of a day to view tasks due on that date
 
-- 🔁 **Sort Task List**
+### 🧭 **Task List Dashboard**
+  - Shows tasks as lists.
+  - Each task is color-coded according to its priority level.
+  - Easily toggle between:
+    - Pending Tasks
+    - Overdue Tasks
+    - Completed Tasks
+    - All Tasks
+   
+### 🔁 **Sort Task List**
   - Sort by **priority level** (High → Low)
   - Sort by **deadline** (Sooner → Later)
+ 
+### 📅 **Calendar Dashboard** 
+  - Visual calendar interface as the default home view after login
+  - 📅 Week View: Shows detailed and highlighted task titles & descriptions in a 7-day layout (default home after login)
+    - Click on the highlighted tasks to view details, or complete or delete the task.
+  - 🗓️ Month View: Shows a full month with task dots per day
+    - Click on the dot to view task details, or complete or delete the task.
+  - Click the side menu of a day to view, complete, or show details of tasks due on that date
+  - Navigate between weeks or months.
+ 
+### 📊 **Statistics Dashboard** 
+  - Visual insights into your productivity:
+    - Total Tasks
+    - Completed Today/This Week
+    - Pending / Overdue
+    - Completion Rate with Progress Bar
+      
+  - Interactive chart panel with toggles:
+    - 🌦 Task Forecast (Stacked Bar Chart)
+    - 📋 Task Distribution (Pie Chart)
+    - 📉 Overdue History (Line Chart – 7/14/30 day range)
+  - Uses JFreeChart for high-quality, customizable charts
 
--🔍 **Search & Filter Tasks** 
+### 🔍 **Search & Filter Tasks** 
   - Keyword-based search (title, description, or status)
   - Filter tasks by:
     - **Priority level**
-    - **Status**: Overdue, Due Today, Due in 7/14/30 days
+    - **Status**: Completed, Overdue, Due today, Due tomorrow, Due this week, Due next week, Due in 3/14/30 days
   - Combine search and filters for precise results
   - Results are displayed dynamically in a scrollable list
 
-- 💾 **Local Persistence**
+### 💾 **Local Persistence**
   - Task data is serialized and saved to a user-specific `.ser` file
   - On login, your previous tasks are restored
 
-- 🚪 **Log Out**
+### 🚪 **Log Out**
   - Securely log out from the session
-  - Automatically saves tasks before exiting to login screen
+  - Automatically saves tasks before exiting to the login screen
 
 ---
 
