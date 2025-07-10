@@ -79,12 +79,13 @@ public class TaskPanel extends JPanel{
 		
 		completedBox.addActionListener(e -> {
 			task.setCompleted(completedBox.isSelected());
-			if (completedBox.isSelected()) {
-				taskArea.setBackground(new Color(0x7bb66f));
-			}
-			else {
-				setPriorityColor();
-			}
+			setPriorityColor();
+//			if (completedBox.isSelected()) {
+//				taskArea.setBackground(new Color(0x7bb66f));
+//			}
+//			else {
+//				setPriorityColor();
+//			}
 			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			TaskController.refresh(mainContent, view, task.getDeadline());
 		});
@@ -144,16 +145,8 @@ public class TaskPanel extends JPanel{
 	 * High = red, Medium = orange, Low = yellow.
 	 */
 	private void setPriorityColor() {
-		switch (task.getPriorityLevel()) {
-		case PriorityLevel.HIGH: 
-			taskArea.setBackground(new Color(0xe97f7f));
-			break;
-		case PriorityLevel.MEDIUM: 
-			taskArea.setBackground(new Color(0xff9100));
-			break;
-		case PriorityLevel.LOW: 
-			taskArea.setBackground(new Color(0xf4c430));
-			break;
-		}
+		taskArea.setBackground(TaskManager.getColorForTask(task));
 	}
+	
+	
 }

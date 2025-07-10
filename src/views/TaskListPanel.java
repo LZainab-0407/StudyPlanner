@@ -11,7 +11,6 @@ import models.Task;
 /**
  * A panel that displays a vertical list of TaskPanels.
  * Each task is shown with options to complete, edit, or delete it.
- *
  */
 public class TaskListPanel extends JPanel{
 	JPanel mainContentPanel;

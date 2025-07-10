@@ -33,7 +33,7 @@ public class MyMenuBar extends JMenuBar{
 		// view menu
 		JMenuItem calendarItem = new JMenuItem("Calendar");
 		calendarItem.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent);
+			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
 		});
 		JMenuItem taskListItem = new JMenuItem("Task List");
 		taskListItem.addActionListener(e -> {

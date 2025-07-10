@@ -44,7 +44,6 @@ import org.jfree.chart.ui.RectangleEdge;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
-import controllers.CalendarController;
 import controllers.StatsController;
 import data.TaskManager;
 
@@ -141,10 +140,7 @@ public class StatsView extends JPanel{
 		// sits at the bottom of stats view
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		buttonPanel.setPreferredSize(new Dimension(70, 80));
-		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-64.png"));
-		backButton.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent);
-		});
+		BackButton backButton = new BackButton(mainContent);
 		buttonPanel.add(backButton);
 		
 		this.add(topPanel, BorderLayout.NORTH);
