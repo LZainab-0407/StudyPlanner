@@ -24,22 +24,30 @@ public class TaskManagerPanel extends JPanel{
 		
 		this.setLayout(new GridLayout(6, 1, 0, 2));
 		
-		JButton addNewTaskButton = new IconOnlyButton("Add to task list", new ImageIcon("Resources/icons/add_task.png"));
+		IconOnlyButton addNewTaskButton = new IconOnlyButton("Add new task", new ImageIcon("Resources/icons/add-64-green.png"));
 		addNewTaskButton.addActionListener(e -> TaskController.addNewTask(parent, mainContent));
 		
-		JButton sortTasksButton = new IconOnlyButton("Sort task list " + "(Go to task list to see sorted tasks)", 
+		IconOnlyButton showTasklistButton = new IconOnlyButton("Show task list", 
+													new ImageIcon("Resources/icons/tasklist-64.png"));
+		showTasklistButton.addActionListener(e -> {
+			TaskController.displayTaskList(mainContent, null, ViewContext.TASK_LIST_PENDING);
+		});
+		
+		IconOnlyButton sortTasksButton = new IconOnlyButton("Sort task list " + "(Go to task list to see sorted tasks)", 
 													new ImageIcon("Resources/icons/sort-64.png"));
 		sortTasksButton.addActionListener(e -> {
 			JPopupMenu options = generatePopupMenu(mainContent);
 			options.show(sortTasksButton, 0, sortTasksButton.getHeight());
 		});
 		
-		JButton searchButton = new IconOnlyButton("Search tasks", new ImageIcon("Resources/icons/search.png"));
+		IconOnlyButton searchButton = new IconOnlyButton("Search tasks", new ImageIcon("Resources/icons/search-64-arcade.png"));
 		searchButton.addActionListener(e -> {
+			//UserSession.setCurrentViewContext();
 			SearchController.displaySearchView(mainContent, parent);
 		});
 		
 		this.add(addNewTaskButton);
+		this.add(showTasklistButton);
 		this.add(sortTasksButton);
 		this.add(searchButton);
 	}

@@ -18,7 +18,7 @@ import models.UserSession;
  * a successful login. It contains the main content area (center), a left panel,
  * a right-side control panel with buttons, and a top menu bar.
  *
- * The default center view is the calendar dashboard.
+ * The default center view is the calendar week dashboard.
  */
 public class MainFrame extends JFrame {
 	
@@ -34,7 +34,7 @@ public class MainFrame extends JFrame {
 		this.add(leftPanel, BorderLayout.WEST);
 		
 		CalendarView calendarView = new CalendarView(mainContent, ViewContext.CALENDAR_WEEK);
-		UserSession.setCurrentViewContext(ViewContext.CALENDAR_MONTH); 
+		UserSession.setCurrentViewContext(ViewContext.CALENDAR_WEEK); 
 		mainContent.add(calendarView, BorderLayout.CENTER);
 		
 		this.add(mainContent, BorderLayout.CENTER);
@@ -51,8 +51,10 @@ public class MainFrame extends JFrame {
 	
 	/**
     * Generates the right-side control panel which contains:
-    * - Task management buttons (add, sort, etc.)
-    * - A logout button that saves data and returns to login screen
+    * <ul>
+    * 	<li> Task management buttons (add, sort, etc.) </li>
+    * 	<li> A logout button that saves data and returns to login screen </li>
+    * </ul>
     *
     * @param mainFrame the parent application frame
     * @param mainContent the central panel to refresh as needed
@@ -85,6 +87,17 @@ public class MainFrame extends JFrame {
 		return rightPanel;
 	}
 	
+	/**
+	    * Generates the right-side control panel which contains:
+	    * <ul>
+	    * 	<li> A Statistics button that switches to the statistics dashboard </li>
+	    * 	<li> A Setting button that switches to settings dashboard </li>
+	    * </ul>
+	    *
+	    * @param mainFrame the parent application frame
+	    * @param mainContent the central panel to refresh as needed
+	    * @return a configured JPanel for the left side of the layout
+	    */
 	public static JPanel generateLeftPanel(JFrame mainFrame, JPanel mainContent) {
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(new Dimension(100, 500));

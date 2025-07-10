@@ -40,6 +40,8 @@ public class TaskTitlePanel extends JPanel{
 		String info = task.getTitle() + "\n" + task.getDescription();
 		this.taskArea = new JTextArea(info);
 		
+		taskArea.setLineWrap(true);
+		taskArea.setWrapStyleWord(true);
 		taskArea.setFont(new Font("Arial", Font.PLAIN, 10));
 		taskArea.setEditable(false);
 		taskArea.setOpaque(true);
@@ -53,6 +55,7 @@ public class TaskTitlePanel extends JPanel{
 		});
 		
 		JScrollPane taskTitlePane = new JScrollPane(taskArea);
+
 		taskTitlePane.setFocusable(false);
 		
 		this.add(taskTitlePane);

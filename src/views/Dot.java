@@ -11,18 +11,19 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import models.Task;
+import models.UserSession;
 
 public class Dot extends JPanel {
-	// the task that the dot represents
+	/** The task that the dot represents */
 	private Task task;
 	
-	// color of the dot
+	/** Color of the dot */
 	private Color color;
 	
-	// border color - semi-transparent black
+	/** Border color for the dot */
 	private final Color borderColor = new Color(0, 0, 0, 90);
 	
-	//
+	/** Panel where the view dashboard sits */
 	JPanel mainContent;
 	
 	 /**
@@ -42,7 +43,7 @@ public class Dot extends JPanel {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new TaskPopUpFrame(task, mainContent, ViewContext.CALENDAR_WEEK);
+				new TaskPopUpFrame(task, mainContent, UserSession.getCurentViewContext());
 			}
 		});
 	}
