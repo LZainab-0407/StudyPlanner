@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import models.UserSession;
+
 /**
  * Represents the main calendar UI component.
  * Allows users to toggle between a monthly and weekly view,
@@ -57,9 +59,9 @@ public class CalendarView extends JPanel{
 	/**
      * Constructs a calendar view panel depending on {@code ViewContext}.
      * <p>
-     * </ul>
-     * 	<li> If {@code ViewContext} is CALENDAR_WEEK, weekly view is shown <li>
-     * 	<li> If {@code ViewContext} is CALENDAR_MONTH, monthly view is shown <li>
+     * <ul>
+     * 	<li>If {@code ViewContext} is CALENDAR_WEEK, weekly view is shown</li>
+     * 	<li> If {@code ViewContext} is CALENDAR_MONTH, monthly view is shown </li>
      * </ul>
      *
      * @param mainContent the main content panel where the calendar is displayed
@@ -110,6 +112,7 @@ public class CalendarView extends JPanel{
 		JButton weekButton = new JButton("Week");
 		weekButton.setFocusable(false);
 		weekButton.addActionListener(e -> {
+			UserSession.setCurrentViewContext(ViewContext.CALENDAR_WEEK);
 			updateCalendarWeek(mainPanel);
 			highlightActiveButton(weekButton);
 		});
@@ -117,6 +120,7 @@ public class CalendarView extends JPanel{
 		JButton monthButton = new JButton("Month");
 		monthButton.setFocusable(false);
 		monthButton.addActionListener(e -> {
+			UserSession.setCurrentViewContext(ViewContext.CALENDAR_MONTH);
 			updateCalendarMonth(mainPanel);
 			highlightActiveButton(monthButton);
 		});

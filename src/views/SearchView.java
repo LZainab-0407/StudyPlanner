@@ -86,10 +86,12 @@ public class SearchView extends JPanel{
 	
 	/**
      * Creates and returns the search panel that contains:
-     * - back button for going back to the main calendar dashboard
-     * - keyword text field
-     * - search button
-     * - filter button
+     * <ul>
+     * 	<li>back button for going back to the main calendar dashboard</li>
+     *  <li>keyword text field</li>
+     * 	<li>search button</li>
+     * 	<li>filter button</li>
+     * </ul>
      *
      * @param mainContent the main content area for navigation
      * @return configured search input panel
@@ -100,16 +102,18 @@ public class SearchView extends JPanel{
 		searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5 ));
 		searchPanel.setPreferredSize(new Dimension(800, 70));
 		
-		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-48.png"));
-		backButton.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
-		});
+//		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-48.png"));
+//		backButton.addActionListener(e -> {
+//			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
+//		});
+		
+		BackButton backButton = new BackButton(mainContent, new ImageIcon("Resources/icons/back_arrow-48.png"));
 		
 		// placeholder keyword field
 		keywordField = new JTextField(50);
 		String placeholder = "Enter keyword...";
 		keywordField.setForeground(Color.GRAY);
-		keywordField.setFont(new Font("SansSerif", Font.ITALIC, 12));
+		keywordField.setFont(new Font("SansSerif", Font.ITALIC, 14));
 		keywordField.setText(placeholder);
 		
 		// handle placeholder appearance
@@ -133,7 +137,7 @@ public class SearchView extends JPanel{
 		});
 		
 		// search button functionality
-		searchButton = new IconOnlyButton("Search", new ImageIcon("Resources/icons/search-30.png"));
+		searchButton = new IconOnlyButton("Search", new ImageIcon("Resources/icons/search-48-arcade.png"));
 		searchButton.addActionListener(e -> {
 			if(keywordField.getText().trim().isBlank() ||
 					keywordField.getText().equalsIgnoreCase("Enter keyword...")) {
@@ -146,7 +150,7 @@ public class SearchView extends JPanel{
 		});
 		
 		// filter button functionality
-		filterButton = new IconOnlyButton("Filter", new ImageIcon("Resources/icons/filter-30.png"));
+		filterButton = new IconOnlyButton("Filter", new ImageIcon("Resources/icons/filter-48-arcade.png"));
 		filterButton.addActionListener(e -> {
 			openFilterDialog();
 		});
@@ -161,9 +165,11 @@ public class SearchView extends JPanel{
 	
 	 /**
      * Opens a modal filter dialog where users can:
-     * - enter a keyword 
-     * - filter by priority
-     * - filter by task status (overdue, due today, etc.)
+     * <ul>
+     * 	<li>enter a keyword </li>
+     *  <li>filter by priority</li>
+     * 	<li>filter by task status (overdue, due today, etc.)</li>
+     * </ul>
      *
      * After clicking "Apply", tasks are filtered and displayed.
      */
@@ -206,7 +212,7 @@ public class SearchView extends JPanel{
 		applyButton.setFocusable(false);
 		applyButton.addActionListener(e -> {
 			if(keywordField.getText().trim().isBlank() ||
-					keywordField.getText().equalsIgnoreCase("Enter keyword...")) {
+					filterKeywordField.getText().equalsIgnoreCase("Enter keyword...")) {
 				JOptionPane.showMessageDialog(null, "Please enter a keyword for your search,"
 						+ " or enter 'all' for all tasks.");
 				return;

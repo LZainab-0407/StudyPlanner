@@ -66,6 +66,8 @@ public class CalendarDayPanel extends JPanel {
 		else {
 			JPanel taskTitleListPanel = generateTaskTitleListPanel(mainContent);
 			JScrollPane scrollPane = new JScrollPane(taskTitleListPanel);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			// highlight today
 			if(LocalDate.now().equals(LocalDate.of(currentMonth.getYear(), currentMonth.getMonth(), dayOfMonth))) {
 				topPanel.setBackground(new Color(0xd6befa)); // lavender
@@ -115,7 +117,7 @@ public class CalendarDayPanel extends JPanel {
 		
 		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, date, ViewContext.CALENDAR_MONTH);
+			TaskController.displayTaskList(mainContent, date, UserSession.getCurentViewContext());
 		});
 		
 		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
@@ -126,7 +128,7 @@ public class CalendarDayPanel extends JPanel {
 					TaskManager.getLatestFilteredTasks().remove(t);
 				}
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-				TaskController.refresh(mainContent, ViewContext.CALENDAR_MONTH, null);
+				TaskController.refresh(mainContent, UserSession.getCurentViewContext(), null);
 			}
 		});
 		

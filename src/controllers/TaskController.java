@@ -4,9 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -23,6 +23,7 @@ import data.TaskManager;
 import models.PriorityLevel;
 import models.Task;
 import models.UserSession;
+import views.BackButton;
 import views.IconOnlyButton;
 import views.TaskFormPanel;
 import views.TaskListNavigationPanel;
@@ -122,7 +123,17 @@ public class TaskController{
 			JLabel pendingTasksLabel = new JLabel("Tasks due on " + date.format(formatter), SwingConstants.CENTER);
 			pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 			mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
-			taskListPanel = new TaskListPanel(mainContent, TaskManager.getTasksOnDate(date), ViewContext.TASK_LIST_ON_DATE);
+			
+			// get pending tasks
+			ArrayList<Task> tasks = TaskManager.getTasksOnDate(date);
+			// also get completed tasks
+			ArrayList<Task> completedTasks = TaskManager.getCompletedTasks();
+			for(Task t: completedTasks) {
+				if (t.getDeadline().equals(date)) {
+					tasks.add(t);
+				}
+			}
+			taskListPanel = new TaskListPanel(mainContent, tasks, ViewContext.TASK_LIST_ON_DATE);
 		}
 		else {
 			JPanel topPanel = new JPanel(new BorderLayout(10, 10));
@@ -171,10 +182,11 @@ public class TaskController{
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		buttonPanel.setPreferredSize(new Dimension(500, 80));
 		
-		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-64.png"));
-		backButton.addActionListener(e -> {
-			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
-		});
+//		JButton backButton = new IconOnlyButton("Go back to calendar", new ImageIcon("Resources/icons/back_arrow-64.png"));
+//		backButton.addActionListener(e -> {
+//			CalendarController.displayCalendar(mainContent, ViewContext.CALENDAR_WEEK);
+//		});
+		BackButton backButton = new BackButton(mainContent);
 		buttonPanel.add(backButton);
 		
 		mainContent.add(buttonPanel, BorderLayout.SOUTH);
