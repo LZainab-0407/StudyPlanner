@@ -1,1 +1,8 @@
 /bin/
+/target/
+
+# Ignore sensitive API credentials
+src/main/resources/credentials.json
+
+# Ignore Eclipse-generated .resources metadata files
+*.resources
