@@ -5,13 +5,5 @@
 src/main/resources/credentials.json
 
 # Ignore Eclipse-generated .resources metadata files
-<<<<<<< HEAD
-*.resources
 
-tokens/
-*.json
-
-tokens/StoredCredential
-=======
 *.resources
->>>>>>> 1b15c0355d5611d033529e234aafeed4d2a9a146
