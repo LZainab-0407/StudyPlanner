@@ -14,44 +14,20 @@ import models.User;
  * Handles saving/loading user data
  */
 public class UserDataManager {
-	// File path where all user data will be stored
-	private static final String FILE_PATH = "data/users.ser";
 	
 	 /**
-     * Load all registered users from the file.
-     * Returns an empty list if the file does not exist or is corrupted.
+     * Load all registered users from the Users tab of the Google sheet.
      */
-	@SuppressWarnings("unchecked")
 	public static ArrayList<User> loadUsers(){
-		try {
-			FileInputStream input = new FileInputStream(FILE_PATH);
-			ObjectInputStream ois = new ObjectInputStream(input);
-			ArrayList<User> returnList = (ArrayList<User>) ois.readObject();
-			ois.close();
-			return returnList;
-		} catch (Exception e) {
-			return new ArrayList<User>();
-		}
+		return SheetsServiceUtil.readUsersFromSheets();
 	}
 	
 	/**
-     * Save a new user to the user file.
-     * Adds the user to the existing list and writes the full list to disk.
+     * Save a new user.
+     * Adds the user to the existing list in Users tab of the Google sheet.
      */
 	public static void saveUser(User user) {
-		ArrayList<User> users = loadUsers();
-		users.add(user);
-		try {
-			// Ensure data/ directory exists
-	        new File("data").mkdirs();
-
-			FileOutputStream output = new FileOutputStream(FILE_PATH);
-			ObjectOutputStream oos = new ObjectOutputStream(output);
-			oos.writeObject(users);
-			oos.close();
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
+		SheetsServiceUtil.writeUserToSheet(user);
 	}
 
 	/**

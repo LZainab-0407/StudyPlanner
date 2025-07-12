@@ -9,34 +9,34 @@
 	 <dependency>
     	<groupId>com.google.apis</groupId>
     	<artifactId>google-api-services-sheets</artifactId>
-    	<version>v4-rev493-1.23.0</version>
+    	<version>v4-rev20241008-2.0.0</version>
 	</dependency>
 
     <dependency>
     	<groupId>com.google.api-client</groupId>
     	<artifactId>google-api-client</artifactId>
-    	<version>1.23.0</version>
+    	<version>2.7.0</version>
 	</dependency>
    
     <!-- Google OAuth Client Library -->
     <dependency>
     <groupId>com.google.oauth-client</groupId>
     <artifactId>google-oauth-client-jetty</artifactId>
-    <version>1.23.0</version>
+    <version>1.36.0</version>
 	</dependency>
 	
 	<!-- Google HTTP Client Library -->
     <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client-gson</artifactId>
-      <version>1.44.1</version>
-    </dependency>
+      <version>1.45.0</version>
+	</dependency>
 
-    <!-- Gson JSON library -->
+     <!-- ✅ Guava: Needed to prevent NoSuchMethodError -->
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>31.1-jre</version>
     </dependency>
   </dependencies>
   

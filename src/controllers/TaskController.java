@@ -88,8 +88,8 @@ public class TaskController{
 			
 			// update task list
 			TaskManager.addTask(newTask);
-			// save updated task list to file
-			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			
+			// TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			
 			JOptionPane.showMessageDialog(inputFrame, "New task added!");
 			inputFrame.dispose();
@@ -275,9 +275,10 @@ public class TaskController{
 				return; // return from action performed method
 			}
 			task.setDeadline(inputPanel.getDeadlineFromPicker());
-
+			
 			changeFrame.dispose();
-			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			// TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			TaskManager.flagTaskListAsModified(true);
 			refresh(mainContent, view, task.getDeadline());
 		});
 		

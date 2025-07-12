@@ -3,6 +3,8 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -45,6 +47,18 @@ public class MainFrame extends JFrame {
 		JPanel rightPanel = generateRightPanel(this, mainContent);
 		this.add(rightPanel, BorderLayout.EAST);
 		
+		// save on close
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(TaskManager.isTaskListModified()) {
+					TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				}
+				System.exit(0);
+			}
+			
+		});
+		
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
@@ -76,7 +90,10 @@ public class MainFrame extends JFrame {
 		logOutButton.setFocusable(false);
 		
 		logOutButton.addActionListener(e -> {
-			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			//TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			if(TaskManager.isTaskListModified()) {
+				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			}
 			UserSession.logout();
 			mainFrame.dispose();
 			new LogInFrame();

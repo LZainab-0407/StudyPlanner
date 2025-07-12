@@ -37,6 +37,8 @@ public class TaskManager {
 	 */
 	private static ArrayList<Task> latestFilteredTasks = new ArrayList<Task>();
 	
+	private static Boolean taskListModified = false;
+	
 	/**
      * Adds a new task to the current task list.
      *
@@ -44,6 +46,33 @@ public class TaskManager {
      */
 	public static void addTask(Task task) {
 		taskList.add(task);
+		taskListModified = true;
+	}
+	
+	/**
+	 * marks the task as completed or not completed
+	 * 
+	 * @param task the task to be marked
+	 * @param isCompleted true if task is completed, false otherwise
+	 */
+	public static void setTaskComplete(Task task, Boolean isCompleted) {
+		task.setCompleted(isCompleted);
+		taskListModified = true;
+	}
+	
+	/**
+	 * Called when a task is edited. this marks taskList as modified
+	 * If modified, tasklist is saved to google sheet when the app is closed, 
+	 * or user is switched or user logs out
+	 * 
+	 * @param isModified 
+	 */
+	public static void flagTaskListAsModified(Boolean isModified) {
+		taskListModified = true;
+	}
+	
+	public static Boolean isTaskListModified() {
+		return taskListModified;
 	}
 	
 	/**
@@ -367,41 +396,25 @@ public class TaskManager {
 	}
 	
 	 /**
-     * Saves the current user's task list to a serialized file in the {@code data/} directory.
-     *
+     * Saves all tasks of the current user to the Google Sheet.
+     * Clears any previous task entries of that user from the sheet.
+     * 
      * @param username the username used to name the file
      */
 	public static void saveTasksForUser(String username) {
-		try {
-			// Ensure that the data/ directory exists before writing
-            new File("data").mkdirs();
-			FileOutputStream output = new FileOutputStream("data/" + username + "_tasks.ser");
-			ObjectOutputStream oos = new ObjectOutputStream(output);
-			// old task list is removed
-			oos.reset();
-			// new task list is written to file
-			oos.writeObject(taskList);
-			oos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		SheetsServiceUtil.writeTasksToSheet(taskList, username);
 	}
 	
-	 /**
-     * Loads the user's task list from a serialized file in the {@code data/} directory.
+	/**
+     * Loads all tasks belonging to the given user from the Google Sheet.
      *
-     * @param username the username used to locate the file
+     * @param username the username of the user
      */
-	@SuppressWarnings("unchecked")
 	public static void loadTasksForUser(String username) {
-		try {
-			FileInputStream input = new FileInputStream("data/" + username + "_tasks.ser");
-			ObjectInputStream ois = new ObjectInputStream(input);
-			taskList = (ArrayList<Task>) ois.readObject();
-			ois.close();
-		}catch (Exception e){
-			taskList = new ArrayList<>();
-		}
+		ArrayList<Task> loadedTasks = SheetsServiceUtil.readTasksFromSheet(username);
+		// make sure tasklist is empty
+		taskList.clear();
+		taskList.addAll(loadedTasks);
 	}
 	
 	/**
@@ -436,6 +449,7 @@ public class TaskManager {
      */
     public static void clearTasks() {
         taskList.clear();
+        taskListModified = true;
     }
     
     /**
@@ -445,6 +459,7 @@ public class TaskManager {
      */
     public static void deleteTask(Task task) {
     	taskList.remove(task);
+    	taskListModified = true;
     }
 	
 }

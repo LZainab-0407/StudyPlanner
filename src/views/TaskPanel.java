@@ -78,15 +78,10 @@ public class TaskPanel extends JPanel{
 		}
 		
 		completedBox.addActionListener(e -> {
-			task.setCompleted(completedBox.isSelected());
+			TaskManager.setTaskComplete(task, completedBox.isSelected()); // taskList is flagged as modified in this method
+			//task.setCompleted(completedBox.isSelected());
 			setPriorityColor();
-//			if (completedBox.isSelected()) {
-//				taskArea.setBackground(new Color(0x7bb66f));
-//			}
-//			else {
-//				setPriorityColor();
-//			}
-			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			//TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			TaskController.refresh(mainContent, view, task.getDeadline());
 		});
 		
@@ -94,11 +89,11 @@ public class TaskPanel extends JPanel{
 		JButton deleteButton = new IconOnlyButton("Delete task", new ImageIcon("Resources/icons/delete.png"));
 		deleteButtonPanel.add(deleteButton);
 		deleteButton.addActionListener(e -> {
-			TaskManager.deleteTask(task);
+			TaskManager.deleteTask(task); // taskList is flagged as modified in this method
 			if(TaskManager.getLatestFilteredTasks().contains(task)) {
 				TaskManager.getLatestFilteredTasks().remove(task);
 			}
-			TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+			//TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			TaskController.refresh(mainContent, view, task.getDeadline());
 		});
 		
