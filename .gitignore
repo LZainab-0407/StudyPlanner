@@ -8,4 +8,6 @@ src/main/resources/credentials.json
 *.resources
 
 tokens/
-*.json"tokens/" 
+*.json
+
+tokens/StoredCredential
