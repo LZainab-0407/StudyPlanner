@@ -6,3 +6,6 @@ src/main/resources/credentials.json
 
 # Ignore Eclipse-generated .resources metadata files
 *.resources
+
+tokens/
+*.json"tokens/" 
