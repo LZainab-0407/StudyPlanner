@@ -1,14 +1,10 @@
 # 🗓️ StudyPlanner – Java Task Management App
 
-A personal task manager built in **Java Swing**, following the **MVC design pattern**. Users can sign up, log in, and manage tasks with deadlines and priorities. Tasks are persisted locally per user. Includes features like sorting, editing, and completion tracking.
+A personal task and study planner with an intuitive calendar interface, visual statistics, and persistent cloud storage. Users can sign up, log in, and manage tasks with deadlines and priorities. Built using Java Swing and backed by Google Sheets for scalable, multi-user task tracking.
 
 ---
 
 ## 🌟 Features
-
-### 🔐 **User Authentication**
-  - Sign up and log in with unique user credentials
-  - Each user has their own saved task list (stored locally)
 
 ### 📝 **Add & Edit Tasks**
   - Add tasks with a title, description, priority level, and deadline
@@ -65,10 +61,18 @@ A personal task manager built in **Java Swing**, following the **MVC design patt
   - Combine search and filters for precise results
   - Results are displayed dynamically in a scrollable list
 
-### 💾 **Local Persistence**
-  - Task data is serialized and saved to a user-specific `.ser` file
-  - On login, your previous tasks are restored
+### ☁️ **Cloud Sync** 
+  - Tasks are saved to a centralized Google Sheet, allowing multiple users to manage their own data across devices.
 
+### 🔐 **User Authentication** 
+  - Supports signup and login with credentials stored securely in the cloud.
+
+### 🔐 **User Management in the Cloud**
+  - User credentials (username + password) are stored in a **Users** sheet.
+  - Each task includes a `username` field, so user data is separated securely.
+  - During signup, the app checks the **Users** sheet to prevent duplicate usernames.
+  - During login, credentials are validated against the **Users** sheet.
+  
 ### 🚪 **Log Out**
   - Securely log out from the session
   - Automatically saves tasks before exiting to the login screen
@@ -80,17 +84,17 @@ A personal task manager built in **Java Swing**, following the **MVC design patt
 - **Java Swing** – for GUI
 - **MVC Architecture** – to separate model, view, and control logic
 - **JCalendar Library** – for date picking (via `JDateChooser`)
-- **Java Serialization** – for persistent storage
 - **Custom Icons & Styling** – from https://icons8.com/icons Clean and modern UI
+- **Google Sheets API (OAuth 2.0 authentication)**
+- **Maven for dependency management**
 
 ---
-
-## 📁 How to Run the Project
-- Clone or download the repository
-- Open the project in Eclipse or VS Code
-- Make sure the data/ folder exists or will be auto-created
-- Run Main.java
-- Sign up and start managing your tasks!
+## 📁 To run this project locally:
+1. Clone the repo
+2. Ensure your `credentials.json` is in `src/main/resources`
+3. Launch the app from your `Main.java` or the GUI launcher
+4. On first run, the app will prompt for Google OAuth login to authorize access
+6. Sign up and start managing your tasks!
 
 ---
 
