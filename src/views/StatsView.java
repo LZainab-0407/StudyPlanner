@@ -45,7 +45,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import controllers.StatsController;
+import controllers.ThemeController;
 import data.TaskManager;
+import data.ThemeManager;
 
 /**
  * The {@code StatsView} class represents the statistics dashboard view.
@@ -85,6 +87,7 @@ public class StatsView extends JPanel{
 		
 		JPanel dataPanel = new JPanel(new GridLayout(10, 1, 2, 2));
 		dataPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		ThemeController.applyTheme(dataPanel);
 		
 		JLabel totaltasksLabel = new JLabel ("📋 Total tasks: " + TaskManager.getTasks().size());
 		JLabel completedTodayLabel = new JLabel ("📅 Completed today: " + TaskManager.getNumTasksCompletedToday());
@@ -97,6 +100,7 @@ public class StatsView extends JPanel{
 		for(JLabel label: new JLabel[] 
 				{completionRate, completedTodayLabel, completedThisWeekLabel, completedTasksLabel, pendingTasksLabel, overdueLabel, totaltasksLabel,}) {
 			label.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			label.setForeground(ThemeManager.getForegroundColor());
 			dataPanel.add(label);
 		}
 		
@@ -107,6 +111,7 @@ public class StatsView extends JPanel{
 		leftStatsPanel.setPreferredSize(new Dimension(200, 500));
 		leftStatsPanel.add(dataPanel, BorderLayout.CENTER);
 		leftStatsPanel.add(progressBarPanel, BorderLayout.NORTH);
+		ThemeController.applyTheme(leftStatsPanel);
 		
 		// panel that hold visual data
 		JPanel visualPanel = new JPanel(new BorderLayout());
@@ -116,6 +121,7 @@ public class StatsView extends JPanel{
 		visualPanel.add(forecastPanel, BorderLayout.CENTER);
 		
 		JPanel visualNavigationPanel = generateVisualNavigationPanel(visualPanel);
+		ThemeController.applyTheme(visualNavigationPanel);
 		
 		// sits on the right side of stats panel -> shows visual data,, and a navigation 
 				// panel that toggles between different visual data
@@ -123,6 +129,7 @@ public class StatsView extends JPanel{
 		rightStatsPanel.setPreferredSize(new Dimension(600, 550));
 		rightStatsPanel.add(visualPanel, BorderLayout.CENTER);
 		rightStatsPanel.add(visualNavigationPanel, BorderLayout.NORTH);
+		ThemeController.applyTheme(rightStatsPanel);
 		
 		// panel which contains the left and right stats panels
 		JPanel centerPanel = new JPanel(new BorderLayout(20, 20));
@@ -130,22 +137,27 @@ public class StatsView extends JPanel{
 		
 		centerPanel.add(leftStatsPanel, BorderLayout.WEST);
 		centerPanel.add(rightStatsPanel, BorderLayout.EAST);
+		ThemeController.applyTheme(centerPanel);
 		
 		// contains a label, sits at the top of stats view
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JLabel topLabel = new JLabel("Task Statistics", SwingConstants.CENTER);
 		topLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+		topLabel.setForeground(ThemeManager.getForegroundColor());
 		topPanel.add(topLabel);
+		ThemeController.applyTheme(topPanel);
 		
 		// sits at the bottom of stats view
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		buttonPanel.setPreferredSize(new Dimension(70, 80));
 		BackButton backButton = new BackButton(mainContent);
 		buttonPanel.add(backButton);
+		ThemeController.applyTheme(buttonPanel);
 		
 		this.add(topPanel, BorderLayout.NORTH);
 		this.add(centerPanel, BorderLayout.CENTER);
 		this.add(buttonPanel, BorderLayout.SOUTH);
+		ThemeController.applyTheme(this);
 	}
 	
 	/**
@@ -405,6 +417,7 @@ public class StatsView extends JPanel{
 		
 		JLabel label = new JLabel("Task Completion Progress", SwingConstants.CENTER);
 		label.setFont(new Font("SansSerif", Font.BOLD, 14));
+		label.setForeground(ThemeManager.getForegroundColor());
 		
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setMinimum(0);
@@ -414,6 +427,7 @@ public class StatsView extends JPanel{
 		
 		progressPanel.add(label, BorderLayout.NORTH);
 		progressPanel.add(progressBar, BorderLayout.CENTER);
+		ThemeController.applyTheme(progressPanel);
 		
 		return progressPanel;
 	}

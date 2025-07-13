@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import controllers.TaskController;
+import controllers.ThemeController;
 import data.TaskManager;
 import models.Task;
 import models.UserSession;
@@ -34,7 +35,6 @@ public class CalendarDayPanel extends JPanel {
 	private final YearMonth currentMonth;
 	private final int dayOfMonth;
 	private JPanel mainContent;
-	private boolean isMonth;
 	
 	 /**
      * Constructs a day panel for a specific day in a calendar.
@@ -102,6 +102,8 @@ public class CalendarDayPanel extends JPanel {
 		});
 		topPanel.add(optionsButton);
 		
+		ThemeController.applyTheme(topPanel);
+		
 		return topPanel;
 	}
 	
@@ -117,7 +119,7 @@ public class CalendarDayPanel extends JPanel {
 		
 		JMenuItem showTasksItem = new JMenuItem("Show all tasks");
 		showTasksItem.addActionListener(e -> {
-			TaskController.displayTaskList(mainContent, date, UserSession.getCurentViewContext());
+			TaskController.displayTaskList(mainContent, date, ViewContext.TASK_LIST_ON_DATE);
 		});
 		
 		JMenuItem deleteTaskItem = new JMenuItem("Delete all tasks");
@@ -137,7 +139,7 @@ public class CalendarDayPanel extends JPanel {
 			for (Task t: TaskManager.getTasksOnDate(date)) {
 				t.setCompleted(true);
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
-				TaskController.refresh(mainContent, ViewContext.CALENDAR_MONTH, null);
+				TaskController.refresh(mainContent, UserSession.getCurentViewContext(), null);
 			}
 		});
 		
@@ -193,6 +195,7 @@ public class CalendarDayPanel extends JPanel {
 		// show pendings tasks
 		for(Task task : tasks) {
 			JPanel taskTitlePanel = new TaskTitlePanel(task, TaskManager.getColorForTask(task), mainContent);
+			ThemeController.applyTheme(taskTitlePanel);
 			TaskTitleListPanel.add(taskTitlePanel);
 		}
 		
@@ -200,10 +203,12 @@ public class CalendarDayPanel extends JPanel {
 		for(Task task: TaskManager.getCompletedTasks()) {
 			if(task.getDeadline().equals(currentMonth.atDay(dayOfMonth))) {
 				JPanel taskTitlePanel = new TaskTitlePanel(task, TaskManager.getColorForTask(task), mainContent);
+				ThemeController.applyTheme(taskTitlePanel);
 				TaskTitleListPanel.add(taskTitlePanel);
 			}
 		}
 		
+		ThemeController.applyTheme(TaskTitleListPanel);
 		return TaskTitleListPanel;
 	}
 	

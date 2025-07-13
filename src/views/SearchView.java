@@ -23,7 +23,9 @@ import javax.swing.JTextField;
 import controllers.CalendarController;
 import controllers.SearchController;
 import controllers.TaskController;
+import controllers.ThemeController;
 import data.TaskManager;
+import data.ThemeManager;
 import models.PriorityLevel;
 import models.Task;
 
@@ -78,9 +80,11 @@ public class SearchView extends JPanel{
 		
 		this.searchPanel = generateSearchPanel(mainContent);
 		this.searchResultPanel = new JPanel(new BorderLayout());
+		ThemeController.applyTheme(searchResultPanel);
 		
 		this.add(searchPanel, BorderLayout.NORTH);
 		this.add(searchResultPanel, BorderLayout.CENTER);
+		ThemeController.applyTheme(this);
 		
 	}
 	
@@ -160,6 +164,8 @@ public class SearchView extends JPanel{
 		searchPanel.add(searchButton);
 		searchPanel.add(filterButton);
 		
+		ThemeController.applyTheme(searchPanel);
+		
 		return searchPanel;
 	}
 	
@@ -184,6 +190,7 @@ public class SearchView extends JPanel{
 		
 		// add keywordField set to text from search panel kewword field
 		JLabel keywordLabel = new JLabel("Keyword: ");
+		keywordLabel.setForeground(ThemeManager.getForegroundColor());
 		filterPanel.add(keywordLabel);
 		JTextField filterKeywordField = new JTextField(10);
 		filterKeywordField.setText(keywordField.getText());
@@ -191,6 +198,7 @@ public class SearchView extends JPanel{
 		
 		// add priorityBox (drop-down)
 		JLabel priorityLevelLabel = new JLabel("Priority Level: ");
+		priorityLevelLabel.setForeground(ThemeManager.getForegroundColor());
 		filterPanel.add(priorityLevelLabel);
 		priorityBox = new JComboBox<>(PriorityLevel.values());
 		priorityBox.insertItemAt(null, 0);
@@ -199,6 +207,7 @@ public class SearchView extends JPanel{
 		
 		// add statusBox (drop-down)
 		JLabel statusLabel = new JLabel("Status: ");
+		statusLabel.setForeground(ThemeManager.getForegroundColor());
 		filterPanel.add(statusLabel);
 		String[] statuses = {"Completed", "Overdue", "Due today", "Due tomorrow","Due in 3 days", "Due this week", 
 				"Due next week", "Due in 14 days" , "Due in 30 days"};
@@ -230,6 +239,8 @@ public class SearchView extends JPanel{
 			filterDialog.dispose();
 		});
 		filterPanel.add(cancelButton);
+		
+		ThemeController.applyTheme(filterPanel);
 		
 		filterDialog.add(filterPanel, BorderLayout.CENTER);
 		filterDialog.pack();

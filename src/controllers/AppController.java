@@ -1,6 +1,7 @@
 package controllers;
 
 import data.TaskManager;
+import data.ThemeManager;
 import models.User;
 import models.UserSession;
 import views.LogInFrame;
@@ -28,6 +29,7 @@ public class AppController {
      * @param user The successfully authenticated user
      */
     public static void onLogInSuccess(User user) {
+    	ThemeManager.loadThemePreference();
     	new MainFrame();
     }
     

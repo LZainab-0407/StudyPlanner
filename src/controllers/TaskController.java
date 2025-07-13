@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import data.TaskManager;
+import data.ThemeManager;
 import models.PriorityLevel;
 import models.Task;
 import models.UserSession;
@@ -121,8 +122,10 @@ public class TaskController{
 		if(date != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 			JLabel pendingTasksLabel = new JLabel("Tasks due on " + date.format(formatter), SwingConstants.CENTER);
+			pendingTasksLabel.setForeground(ThemeManager.getForegroundColor());
 			pendingTasksLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
 			mainContent.add(pendingTasksLabel, BorderLayout.NORTH);
+			ThemeController.applyTheme(mainContent);
 			
 			// get pending tasks
 			ArrayList<Task> tasks = TaskManager.getTasksOnDate(date);
@@ -144,9 +147,11 @@ public class TaskController{
 			
 			JLabel topLabel = new JLabel("", SwingConstants.CENTER);
 			topLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+			topLabel.setForeground(ThemeManager.getForegroundColor());
 			
 			topPanel.add(taskListNavigationPanel, BorderLayout.NORTH);
 			topPanel.add(topLabel, BorderLayout.SOUTH);
+			ThemeController.applyTheme(topPanel);
 			
 			switch(view) {
 			
@@ -170,6 +175,11 @@ public class TaskController{
 				taskListPanel = new TaskListPanel(mainContent, TaskManager.getOverdueTasks(), view);
 				break;
 				
+				// in case the current view is on a specific date
+			case ViewContext.TASK_LIST_ON_DATE: topLabel.setText("Showing Pending Tasks");
+				taskListPanel = new TaskListPanel(mainContent, TaskManager.getPendingTasks(), view);
+				break;
+				
 			default: 
 				break;
 			}
@@ -177,6 +187,7 @@ public class TaskController{
 		}
 		
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);
+		// ThemeController.applyTheme(taskListPane);
 		mainContent.add(taskListPane, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
@@ -188,6 +199,7 @@ public class TaskController{
 //		});
 		BackButton backButton = new BackButton(mainContent);
 		buttonPanel.add(backButton);
+		ThemeController.applyTheme(buttonPanel);
 		
 		mainContent.add(buttonPanel, BorderLayout.SOUTH);
 		mainContent.revalidate();

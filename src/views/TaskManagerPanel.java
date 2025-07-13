@@ -14,6 +14,7 @@ import javax.swing.JPopupMenu;
 
 import controllers.SearchController;
 import controllers.TaskController;
+import controllers.ThemeController;
 import data.TaskManager;
 import models.UserSession;
 
@@ -70,6 +71,8 @@ public class TaskManagerPanel extends JPanel{
 		this.add(sortTasksButton);
 		this.add(searchButton);
 		this.add(saveButton);
+		
+		ThemeController.applyTheme(this);
 	}
 	
 	/**

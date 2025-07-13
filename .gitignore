@@ -5,7 +5,10 @@
 src/main/resources/credentials.json
 
 # Ignore Eclipse-generated .resources metadata files
-
 *.resources
 
+# Ignore sensitive credentials
 tokens/
+
+# Ignore theme preferences
+config/

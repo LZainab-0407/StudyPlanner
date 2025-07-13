@@ -1,12 +1,10 @@
 package models;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class Task implements Serializable{
-	private static final long serialVersionUID = 1L;
+public class Task{
 
 	private String title;
 	private String description;

@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import controllers.TaskController;
+import controllers.ThemeController;
 import data.TaskManager;
 import models.UserSession;
 
@@ -74,5 +75,6 @@ public class TaskListNavigationPanel extends JPanel{
 		this.add(overdueTasksButton);
 		this.add(completedTasksButton);
 		this.add(allTasksButton);
+		ThemeController.applyTheme(this);
 	}
 }

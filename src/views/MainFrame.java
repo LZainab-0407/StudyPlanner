@@ -1,18 +1,24 @@
 package views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import controllers.StatsController;
+import controllers.TaskController;
+import controllers.ThemeController;
 import data.TaskManager;
+import data.ThemeManager;
 import models.UserSession;
 
 /**
@@ -23,6 +29,9 @@ import models.UserSession;
  * The default center view is the calendar week dashboard.
  */
 public class MainFrame extends JFrame {
+	private static JPanel leftPanel;
+	private static JPanel rightPanel;
+	private static JPanel taskManagerPanel;
 	
 	public MainFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +41,7 @@ public class MainFrame extends JFrame {
 		JPanel mainContent = new JPanel();
 		mainContent.setLayout(new BorderLayout());
 		
-		JPanel leftPanel = generateLeftPanel(this, mainContent);
+		leftPanel = generateLeftPanel(this, mainContent);
 		this.add(leftPanel, BorderLayout.WEST);
 		
 		CalendarView calendarView = new CalendarView(mainContent, ViewContext.CALENDAR_WEEK);
@@ -41,10 +50,12 @@ public class MainFrame extends JFrame {
 		
 		this.add(mainContent, BorderLayout.CENTER);
 		
+		ThemeController.applyTheme(mainContent);
+		
 		MyMenuBar myMenuBar = new MyMenuBar(this, mainContent);
 		this.setJMenuBar(myMenuBar);
 		
-		JPanel rightPanel = generateRightPanel(this, mainContent);
+		rightPanel = generateRightPanel(this, mainContent);
 		this.add(rightPanel, BorderLayout.EAST);
 		
 		// save on close
@@ -56,7 +67,6 @@ public class MainFrame extends JFrame {
 				}
 				System.exit(0);
 			}
-			
 		});
 		
 		this.setLocationRelativeTo(null);
@@ -82,7 +92,7 @@ public class MainFrame extends JFrame {
 		//rightPanel.setBorder(BorderFactory.createLineBorder(new Color(0x0077D1), 2));
 		
 		// Task manager controls (add task, sort task)
-		TaskManagerPanel taskManagerPanel = new TaskManagerPanel(mainContent, mainFrame);
+		taskManagerPanel = new TaskManagerPanel(mainContent, mainFrame);
 		rightPanel.add(taskManagerPanel, BorderLayout.NORTH);
 		
 		// Logout button
@@ -99,6 +109,7 @@ public class MainFrame extends JFrame {
 			new LogInFrame();
 		});
 		
+		ThemeController.applyTheme(rightPanel); //******************************************************
 		rightPanel.add(logOutButton, BorderLayout.SOUTH);
 		
 		return rightPanel;
@@ -116,16 +127,48 @@ public class MainFrame extends JFrame {
 	    * @return a configured JPanel for the left side of the layout
 	    */
 	public static JPanel generateLeftPanel(JFrame mainFrame, JPanel mainContent) {
-		JPanel leftPanel = new JPanel();
-		leftPanel.setPreferredSize(new Dimension(100, 500));
-		leftPanel.setLayout(new GridLayout(6, 1, 0, 2));
+		JPanel left_panel = new JPanel();
+		left_panel.setPreferredSize(new Dimension(90, 500));
+		left_panel.setLayout(new GridLayout(6, 1, 0, 2));
+		//leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		IconOnlyButton statsButton = new IconOnlyButton("Show statistics", new ImageIcon("Resources/icons/statistics-64.png"));
 		statsButton.addActionListener(e -> {
 			StatsController.displayStatsView(mainContent);
 		});
-		leftPanel.add(statsButton);
+		left_panel.add(statsButton);
 		
-		return leftPanel;
+		IconOnlyButton toggleThemeButton = new IconOnlyButton("Toggle Theme", new ImageIcon("Resources/icons/theme-64.png"));
+		toggleThemeButton.addActionListener(e -> {
+			String option = (ThemeManager.getCurrentTheme() == Theme.DARK) ? "☀ Light" : "🌙 Dark";
+			String currentTheme = (ThemeManager.getCurrentTheme() == Theme.DARK) ? "🌙 Dark" : "☀ Light";
+			int response = JOptionPane.showOptionDialog(null, 
+					"Current theme: " + currentTheme + "\n" +
+					"Change theme to " + option + "?",  
+					"Toggle Theme",
+					JOptionPane.YES_NO_OPTION, 
+					JOptionPane.INFORMATION_MESSAGE, 
+					new ImageIcon("Resources/icons/theme-48.png"), 
+					null, 0);
+			switch(response) {
+				case 0: 
+					ThemeManager.toggleTheme(); 
+					ThemeController.applyTheme(leftPanel);
+					ThemeController.applyTheme(rightPanel);
+					ThemeController.applyTheme(taskManagerPanel);
+					if (UserSession.getCurentViewContext().equals(ViewContext.STATS)) {
+						StatsController.updateStatsView(mainContent);
+					} else {
+						TaskController.refresh(mainContent, UserSession.getCurentViewContext(), null);
+					}
+					break;
+				case 1: ; break;
+			}
+		});
+		left_panel.add(toggleThemeButton);
+		
+		ThemeController.applyTheme(left_panel); 
+
+		return left_panel;
 	}
 }

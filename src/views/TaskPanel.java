@@ -18,7 +18,9 @@ import javax.swing.JTextArea;
 
 import controllers.CalendarController;
 import controllers.TaskController;
+import controllers.ThemeController;
 import data.TaskManager;
+import data.ThemeManager;
 import models.PriorityLevel;
 import models.Task;
 import models.UserSession;
@@ -49,9 +51,11 @@ public class TaskPanel extends JPanel{
 		taskArea.setOpaque(true);
 		
 		JScrollPane taskInfoPane = new JScrollPane(taskArea);
+		ThemeController.applyTheme(taskInfoPanel);
 		taskInfoPane.setFocusable(false);
 		
 		taskInfoPanel.add(taskInfoPane);
+		ThemeController.applyTheme(taskInfoPanel);
 		
 		setPriorityColor();
 		
@@ -61,8 +65,10 @@ public class TaskPanel extends JPanel{
 		switch (status){
 		case "Completed!": statusLabel.setForeground(new Color(0x008000)); break;
 		case "Overdue!": statusLabel.setForeground(new Color(0xff2400)); break;
+		default: statusLabel.setForeground(ThemeManager.getForegroundColor()); break;
 		}
 		statusPanel.add(statusLabel);
+		ThemeController.applyTheme(statusPanel);
 		
 		JPanel boxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JCheckBox completedBox = new JCheckBox();
@@ -71,6 +77,7 @@ public class TaskPanel extends JPanel{
 		completedBox.setSelectedIcon(new ImageIcon("Resources/icons/check.png"));
 		completedBox.setOpaque(false);
 		boxPanel.add(completedBox);
+		ThemeController.applyTheme(boxPanel);
 		
 		if(task.isCompleted()) {
 			taskArea.setBackground(new Color(0x7bb66f));
@@ -96,6 +103,7 @@ public class TaskPanel extends JPanel{
 			//TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			TaskController.refresh(mainContent, view, task.getDeadline());
 		});
+		ThemeController.applyTheme(deleteButtonPanel);
 		
 		JPanel editButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JButton editButton = new IconOnlyButton("Edit task", new ImageIcon("Resources/icons/edit.png"));
@@ -103,6 +111,7 @@ public class TaskPanel extends JPanel{
 		editButton.addActionListener(e -> {
 			TaskController.editTask(task, taskInfoPanel, mainContent, view);
 		});
+		ThemeController.applyTheme(editButtonPanel);
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5,5,5,5);
@@ -133,6 +142,8 @@ public class TaskPanel extends JPanel{
 		// first row, fifth column
 		gbc.gridx = 4;
 		this.add(editButtonPanel, gbc);
+		
+		ThemeController.applyTheme(this);
 	}
 	
 	/**
