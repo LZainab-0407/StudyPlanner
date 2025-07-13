@@ -49,6 +49,18 @@ public class ThemeManager {
 	}
 	
 	/**
+	 * Returns calendar day panel color depending on the theme: 
+	 * <ul>
+	 * 	<li>LIGHT: returns blue (0xdff2ff)</li>
+	 * 	<li>DARK: returns gray</li>
+	 * </ul>
+	 * @return accent color
+	 */
+	public static Color getCalendarDayPanelColor() {
+		return (currentTheme == Theme.DARK) ? Color.GRAY : new Color(0xdff2ff);
+	}
+	
+	/**
 	 * Returns the current theme
 	 * @return
 	 */

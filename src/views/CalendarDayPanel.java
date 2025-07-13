@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import controllers.TaskController;
 import controllers.ThemeController;
 import data.TaskManager;
+import data.ThemeManager;
 import models.Task;
 import models.UserSession;
 
@@ -50,7 +51,7 @@ public class CalendarDayPanel extends JPanel {
 		this.mainContent = mainContent;
 		this.setLayout(new BorderLayout());
 		
-		this.setBackground(new Color(0xdff2ff)); // blue
+		this.setBackground(ThemeManager.getCalendarDayPanelColor()); 
 	
 		JPanel topPanel = generateTopPanel(day);
 		this.add(topPanel, BorderLayout.NORTH);
