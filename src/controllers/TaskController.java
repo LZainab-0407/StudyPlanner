@@ -86,7 +86,7 @@ public class TaskController{
 			
 			Task newTask = new Task(taskTitle, taskDescription, taskDeadline, taskPriorityLevel);
 			
-			// update task list
+			// update task list, tasklist is flagged as modified
 			TaskManager.addTask(newTask);
 			
 			// TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());

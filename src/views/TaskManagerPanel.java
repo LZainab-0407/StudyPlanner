@@ -1,12 +1,14 @@
 package views;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
@@ -46,10 +48,28 @@ public class TaskManagerPanel extends JPanel{
 			SearchController.displaySearchView(mainContent, parent);
 		});
 		
+		IconOnlyButton saveButton = new IconOnlyButton("Save now", new ImageIcon("Resources/icons/save-64.png"));
+		saveButton.addActionListener(e -> {
+			String[] responses = {"Continue", "Cancel"};
+			int response = JOptionPane.showOptionDialog(parent, 
+							"Changes are saved automatcally to cloud when you log out or close the app.\n" +
+							"Click continue to save changes now.",  
+							"Save now?",
+							JOptionPane.OK_CANCEL_OPTION, 
+							JOptionPane.INFORMATION_MESSAGE, 
+							new ImageIcon("Resources/icons/save-48.png"), 
+							responses, 0);
+			switch(response) {
+			case 0 : TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername()); break;
+			case 1: break;
+			}
+		});
+		
 		this.add(addNewTaskButton);
 		this.add(showTasklistButton);
 		this.add(sortTasksButton);
 		this.add(searchButton);
+		this.add(saveButton);
 	}
 	
 	/**

@@ -37,6 +37,9 @@ public class TaskManager {
 	 */
 	private static ArrayList<Task> latestFilteredTasks = new ArrayList<Task>();
 	
+	/**
+	 * flag to track unsaved changes
+	 */
 	private static Boolean taskListModified = false;
 	
 	/**
@@ -68,9 +71,13 @@ public class TaskManager {
 	 * @param isModified 
 	 */
 	public static void flagTaskListAsModified(Boolean isModified) {
-		taskListModified = true;
+		taskListModified = isModified;
 	}
 	
+	/**
+	 * Returns true if there are unsaved changes, false otherwise
+	 * @return
+	 */
 	public static Boolean isTaskListModified() {
 		return taskListModified;
 	}
