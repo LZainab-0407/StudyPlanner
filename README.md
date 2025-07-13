@@ -79,6 +79,16 @@ A personal task and study planner with an intuitive calendar interface, visual s
 
 ---
 
+## 💾 Saving Strategy (Performance Optimization)
+To reduce API calls and improve performance:
+- Tasks are only saved to Google Sheets:
+  - When the user clicks a "Save Now" button (optional)
+  - On logout
+  - On closing the app
+- An internal `taskListModified` flag tracks unsaved changes.
+
+  ---
+
 ## 🧠 Technologies Used
 
 - **Java Swing** – for GUI
