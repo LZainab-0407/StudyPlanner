@@ -84,7 +84,6 @@ public class SignUpFrame extends JFrame {
 			if (UserController.signUp(username, password)) { // saves new user and logs in
 				this.dispose();
 				AppController.onLogInSuccess(UserSession.getCurrentUser());
-				JOptionPane.showMessageDialog(this, "Welcome " + username);
 			}
 			else {
 				JOptionPane.showMessageDialog(this, "Username taken. Please choose a different username.");

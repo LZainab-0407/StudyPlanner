@@ -19,6 +19,7 @@ import controllers.TaskController;
 import controllers.ThemeController;
 import data.TaskManager;
 import data.ThemeManager;
+import data.UserDataManager;
 import models.UserSession;
 
 /**
@@ -37,6 +38,7 @@ public class MainFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(1100, 650);
 		this.setLayout(new BorderLayout());
+		this.setTitle(UserSession.getCurrentUser().getUsername() + "'s " + "Study Planner");
 		
 		JPanel mainContent = new JPanel();
 		mainContent.setLayout(new BorderLayout());
@@ -64,6 +66,9 @@ public class MainFrame extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				if(TaskManager.isTaskListModified()) {
 					TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
+				}
+				if(UserDataManager.getIsLoggedIn()) {
+					UserDataManager.saveUserLoggedIn();
 				}
 				System.exit(0);
 			}
@@ -104,6 +109,8 @@ public class MainFrame extends JFrame {
 			if(TaskManager.isTaskListModified()) {
 				TaskManager.saveTasksForUser(UserSession.getCurrentUser().getUsername());
 			}
+			UserDataManager.setIsLoggedIn(false);
+			UserDataManager.saveUserLoggedIn();
 			UserSession.logout();
 			mainFrame.dispose();
 			new LogInFrame();
