@@ -52,6 +52,7 @@ public class SearchController {
 		TaskListPanel taskListPanel = new TaskListPanel(searchResultsPanel, TaskManager.getLatestFilteredTasks(), ViewContext.SEARCH);
 		JScrollPane taskListPane = new JScrollPane(taskListPanel);
 		searchResultsPanel.add(taskListPane, BorderLayout.CENTER);
+		ThemeController.applyTheme(searchResultsPanel);
 		searchResultsPanel.revalidate();
 		searchResultsPanel.repaint();
 	}

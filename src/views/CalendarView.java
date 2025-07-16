@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import controllers.ThemeController;
+import data.ThemeManager;
 import models.UserSession;
 
 /**
@@ -136,6 +138,8 @@ public class CalendarView extends JPanel{
 		navigationPanel.add(weekButton);
 		navigationPanel.add(monthButton);
 		
+		ThemeController.applyTheme(navigationPanel);
+		
 		return navigationPanel;
 	}
 
@@ -152,6 +156,7 @@ public class CalendarView extends JPanel{
 											" " + currentMonth.getYear(), 
 										SwingConstants.CENTER);
 		monthLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+		monthLabel.setForeground(ThemeManager.getForegroundColor());
 		
 		JButton prevMonthButton = new IconOnlyButton("Previous month", new ImageIcon("Resources/icons/left-64.png"));
 		prevMonthButton.addActionListener(e -> {
@@ -173,6 +178,8 @@ public class CalendarView extends JPanel{
 		headerPanel.add(monthLabel, BorderLayout.CENTER);
 		headerPanel.add(nextMonthButton, BorderLayout.EAST);
 		
+		ThemeController.applyTheme(headerPanel);
+		
 		return headerPanel;
 	}
 	
@@ -189,6 +196,7 @@ public class CalendarView extends JPanel{
 		JLabel weekLabel = new JLabel(startOfWeek.format(formatter) + " - " + endOfWeek.format(formatter),
 				SwingConstants.CENTER);
 		weekLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+		weekLabel.setForeground(ThemeManager.getForegroundColor());
 		
 		JButton prevWeekButton = new IconOnlyButton("Previous week", new ImageIcon("Resources/icons/left-64.png"));
 		prevWeekButton.addActionListener(e -> {
@@ -210,6 +218,8 @@ public class CalendarView extends JPanel{
 		headerPanel.add(weekLabel, BorderLayout.CENTER);
 		headerPanel.add(nextWeekButton, BorderLayout.EAST);
 		
+		ThemeController.applyTheme(headerPanel);
+		
 		return headerPanel;
 	}
 	
@@ -223,9 +233,11 @@ public class CalendarView extends JPanel{
 		for(DayOfWeek day : DayOfWeek.values()) {
 			JLabel dayLabel = new JLabel(day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), SwingConstants.CENTER);
 			dayLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
+			dayLabel.setForeground(ThemeManager.getForegroundColor());
 			weekLabelPanel.add(dayLabel);
 		}
 		
+		ThemeController.applyTheme(weekLabelPanel);
 		return weekLabelPanel;
 	}
 	
@@ -240,6 +252,7 @@ public class CalendarView extends JPanel{
 		
 		weekGrid = new JPanel(new GridLayout(1, 7));
 		weekGrid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		ThemeController.applyTheme(weekGrid);
 		
 		ArrayList<LocalDate> daysInWeek = new ArrayList<>();
 		LocalDate current = startOfWeek;
@@ -269,6 +282,7 @@ public class CalendarView extends JPanel{
 		
 		monthGrid = new JPanel(new GridLayout(0, 7)); // 7 columns for 7 days of the week
 		monthGrid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		ThemeController.applyTheme(monthGrid);
 		
 		LocalDate firstOfMonth = currentMonth.atDay(1); 
 		int startDay = firstOfMonth.getDayOfWeek().getValue();

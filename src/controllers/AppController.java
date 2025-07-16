@@ -1,6 +1,8 @@
 package controllers;
 
 import data.TaskManager;
+import data.ThemeManager;
+import data.UserDataManager;
 import models.User;
 import models.UserSession;
 import views.LogInFrame;
@@ -14,11 +16,24 @@ import views.SignUpFrame;
 public class AppController {
 
 	/**
-     * Starts the application by launching the login screen.
+     * Starts the application.
      * Called from Main.java at startup.
      */
     public static void startApp() {
-        new LogInFrame(); // Launch login view
+    	UserDataManager.loadUserLoggedIn();
+    	
+    	// if user was logged in when app was closed
+    	if(UserDataManager.getIsLoggedIn()) {
+    		User user = UserDataManager.getUserLoggedIn();
+    		if (UserController.login(user.getUsername(), user.getPassword())) {
+				onLogInSuccess(UserSession.getCurrentUser());
+			}
+    	}
+    	
+    	// if user logged out before app was closed
+    	else {
+    		new LogInFrame(); // Launch login view
+    	}
     }
     
     /**
@@ -28,6 +43,8 @@ public class AppController {
      * @param user The successfully authenticated user
      */
     public static void onLogInSuccess(User user) {
+    	ThemeManager.loadThemePreference();
+    	UserDataManager.setIsLoggedIn(true);
     	new MainFrame();
     }
     

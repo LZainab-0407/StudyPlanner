@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
 
+import data.ThemeManager;
+
 /**
  * A minimalist icon-only JButton for use in modern UI panels.
  * <p>
@@ -63,7 +65,8 @@ public class IconOnlyButton extends JButton implements MouseListener{
 		// highlight when cursor on button
 		if (e.getSource() == this) {
 			// this.setBackground(Color.LIGHT_GRAY);
-			this.setBackground(new Color(0xd6befa)); // lavender
+			//this.setBackground(new Color(0xd6befa)); // lavender
+			this.setBackground(ThemeManager.getAccentColor());
 			this.setContentAreaFilled(true);
 			this.setOpaque(true);
 //			this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));

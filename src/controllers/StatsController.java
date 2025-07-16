@@ -60,4 +60,8 @@ public class StatsController {
 		visualPanel.repaint();
 	}
 	
+	public static void updateStatsView(JPanel mainContent) {
+		displayStatsView(mainContent);
+	}
+	
 }

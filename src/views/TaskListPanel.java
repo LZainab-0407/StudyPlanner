@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import controllers.ThemeController;
 import data.TaskManager;
 import models.Task;
 
@@ -23,7 +24,7 @@ public class TaskListPanel extends JPanel{
 			JPanel taskPanel = new TaskPanel(task, mainContentPanel, view);
 			this.add(taskPanel);
 		}
-		
+		ThemeController.applyTheme(this);
 	}
 	
 }

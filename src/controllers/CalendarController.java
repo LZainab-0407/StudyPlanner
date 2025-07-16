@@ -33,6 +33,7 @@ public class CalendarController {
 		mainContent.removeAll();
 		CalendarView calendarView = new CalendarView(mainContent, view);
 		mainContent.add(calendarView, BorderLayout.CENTER);
+		//ThemeController.applyTheme(mainContent);
 		mainContent.revalidate();
 	    mainContent.repaint();
 	}
